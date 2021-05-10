@@ -26,8 +26,8 @@ class siderbar extends Component{
                                 <Menu.Item key="8">option7</Menu.Item>
                                 <Menu.Item key="9">option8</Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub1" title="Interpolation">
-                                <Menu.Item key="10">ff</Menu.Item>
+                            <SubMenu key="sub3" title="Interpolation">
+                                <Menu.Item key="10">NewtonDivide <Link to="/NewtonDivide"/></Menu.Item>
                             </SubMenu>
                         </Menu>
                   

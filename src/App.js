@@ -14,6 +14,7 @@ import NewtonRaphson from './Component/NewtonRaphson';
 import Secant from './Component/Secant';
 import Cramer from './Component/Cramer';
 import NewtonDivide from './Component/NewtonDivide';
+import SwaggerAPI from './Container/SwaggerAPI';
 const { Header, Content, Sider } = Layout;
 class App extends Component {
 
@@ -48,6 +49,7 @@ class App extends Component {
                                     <Route path='/Secant' component={Secant} />
                                     <Route path='/Cramer' component={Cramer} />
                                     <Route path='/NewtonDivide' component={NewtonDivide} />
+                                    <Route path='/SwaggerAPI' component={SwaggerAPI} />
                                 </div>
 
                             </Content>

@@ -148,14 +148,13 @@ class NewtonDivide extends React.Component{
                 </div>
                 
                 <div style={{margin:'5px'}}>
-                    <Button style={{marginLeft:'39px',width:'100px'}} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
+                    <Button style={{marginLeft:'px',width:'100px'}} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
+                    <Button style={{marginLeft:'5px',width:'100px'}} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
                 <div style={{margin:'5px'}}>
-                    <h1 style={{fontSize:"20px"}}>{this.state.y}</h1>
+                    <h1 style={{fontSize:"20px"}}>f({this.state.x}) = {this.state.y}</h1>
                 </div>
-                <div style={{margin:'5px'}}>
-                <Button style={{marginLeft:'39px',width:'100px'}} type='primary' onClick={this.onClickExample}>Example</Button>
-                </div>
+                
             </div>
         );
     }

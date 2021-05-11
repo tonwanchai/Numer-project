@@ -17,7 +17,7 @@ class NewtonDivide extends React.Component{
         this.setState({
             n:this.state.apiData[0]["n"],
             matrix : this.state.apiData[0]["matrix"],
-            selectedPoint : this.state.apiData[0]["selectedPoint"],
+            Point : this.state.apiData[0]["selectedPoint"],
             x : this.state.apiData[0]["x"],
         })
     }

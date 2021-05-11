@@ -1,11 +1,11 @@
-import { Layout, Menu} from 'antd';
+import { Layout} from 'antd';
 
 import './lay.css'
 import Siderbar from './siderbar';
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import Home from './Home';
 import Bisection from './Component/Bisection';
 import Onepoint from './Component/Onepoint';

@@ -99,7 +99,7 @@ class FalsePosition extends Component {
         let num = equation_func(Result,f_x);
         num = num.toFixed(3);
         console.log(num);
-        if(num == 0){
+        if(num === 0){
             this.setState({check:(<div style={{color:'red'}}>correct</div>)})
         }else{
             this.setState({check:(<div style={{color:'red'}}>not correct</div>)})

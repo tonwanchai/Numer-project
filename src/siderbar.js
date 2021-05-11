@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
-import { Layout, Menu } from 'antd';
+import {  Menu } from 'antd';
 import {Link} from 'react-router-dom';
 const { SubMenu } = Menu;
-const { Sider } = Layout;
+
 class siderbar extends Component{
     render(){
         return(

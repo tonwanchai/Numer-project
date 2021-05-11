@@ -5,9 +5,10 @@ const api = axios.create({
 })
 
 const getAllInterpolation = () => api.get("/interpolation")
-
+const getAllRootOfEquation = () => api.get("/root-of-equation")
 const apis = {
-    getAllInterpolation
+    getAllInterpolation,
+    getAllRootOfEquation
 }
 
 export default apis;

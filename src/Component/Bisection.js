@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Button } from 'antd';
 
 import {equation_func, fixed_fx} from './Equation_Function'
-
+import apis from '../Container/API'
 
 class BisectionMethod extends React.Component{
 
@@ -15,9 +15,36 @@ class BisectionMethod extends React.Component{
         ifer:null,
         ans:null,
         check:null,
-        cheak_re:false
+        apiData:null,
+        showApiData:[]
     };
-
+    
+    async GetDatafromAPI(){
+        let tmpData = null
+        await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
+        this.setState({apiData:tmpData})
+        console.log(this.state.apiData);
+        let n = this.state.apiData.length;
+        let arr=[];
+        console.log(n);
+        for(let i = 0 ;i < n ; i++){
+            
+            arr.push(<div style={{marginTop:"5px"}}><span >ข้อที่ {i+1} [{this.state.apiData[i]["equation"]}]</span><Button type="primary" onClick={e=>{
+                this.setState({
+                    f_x: this.state.apiData[i]['equation'],
+                    x:this.state.apiData[i]['initial_x'],
+                    xl:this.state.apiData[i]['xl'],
+                    xr:this.state.apiData[i]['xr'],
+                    er:this.state.apuData[i]['error']
+                })
+            }}>เลือก</Button></div>)
+        }
+        this.setState({showApiData:arr});
+        
+    }
+    onClickExample = e =>{
+        this.GetDatafromAPI()
+    }
     myChangeHandler_f_x = (e) => {
         this.setState({f_x: e.target.value});
     }
@@ -95,20 +122,7 @@ class BisectionMethod extends React.Component{
             this.setState({ifer:(<div style={{color:'red'}}>ใส่ฟังก์ชั่นไม่ถูกต้อง</div>)})
         }
     };
-    check_result = e =>{
-        let Result = parseFloat(this.state.ans);
-        let f_x = this.state.f_x;
-        f_x = fixed_fx(f_x);
-        let num = equation_func(Result,f_x);
-        num = num.toFixed(3);
-        console.log(num);
-        if(num == 0){
-            this.setState({check:(<div style={{color:'red'}}>correct</div>)})
-        }else{
-            this.setState({check:(<div style={{color:'red'}}>not correct</div>)})
-        }
-        
-    }
+    
     render(){
         return(
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
@@ -126,17 +140,15 @@ class BisectionMethod extends React.Component{
                     <span>Error =</span>
                     <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0.00001" style={{width:'100px'}} onChange={this.myChangeHandler_er}/></span>
                 </div>
+                <div>
+                    <Button style={{marginLeft:'5px',width:'100px'}} type='primary' onClick={this.onClickExample}>Example</Button>
+                    {this.state.showApiData}
+                </div>
+                
                 <div style={{marginTop:'20px'}}>
                     {this.state.x}
                 </div>
-                <div>
-                    <span ><Button type="primary" onClick={this.check_result}>Check Result</Button></span>
-                    
-                </div>
-                <div>
-                    <span>{this.state.f_x}</span>
-                    <span>{this.state.check}</span>
-                </div>
+                
             </div>
         );
     }

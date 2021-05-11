@@ -49,7 +49,7 @@ class App extends Component {
                                     <Route path='/Secant' component={Secant} />
                                     <Route path='/Cramer' component={Cramer} />
                                     <Route path='/NewtonDivide' component={NewtonDivide} />
-                                    <Route path='/SwaggerAPI' component={SwaggerAPI} />
+                                    <Route path='/Swagger' component={SwaggerAPI} />
                                 </div>
 
                             </Content>

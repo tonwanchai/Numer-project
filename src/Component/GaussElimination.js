@@ -5,8 +5,7 @@ import { create, all } from 'mathjs'
 import apis from '../Container/API'
 const config = {}
 const math = create(all, config)
-
-class Cramer extends React.Component {
+class GuassElimination extends React.Component {
     state = {
         n: 3,
         ans: null,
@@ -119,51 +118,13 @@ class Cramer extends React.Component {
         //console.log(arr_a);
     }
 
-
-    find_x = (e) => {
-
-        try {
-            this.setState({ ifer: null })
-            let n = this.state.n;
-            let i_m_a = this.state.matrix_A;
-            let i_m_b = this.state.matrix_B;
-
-            let m_a = []
-            let m_b = [].concat(i_m_b)
-
-            for (let i = 0; i < n; i++) {
-                m_a[i] = [].concat(i_m_a[i])
-            }
-
-            let det_A = math.det(m_a)
-            det_A = det_A.toFixed(10)
-            let x = []
-            /*
-            [[[1,2],[1,2]]]
-            
-            */
-            for (let i = 0; i < n; i++) {
-                x.push([])
-                for (let j = 0; j < n; j++) {
-                    x[i].push([].concat(m_a[j]))
-                    x[i][j][i] = m_b[j]
-                }
-            }
-            let ans_x = []
-
-            for (let i = 0; i < n; i++) {
-                ans_x.push(<div style={{ fontSize: '40px', fontWeight: 'bold' }}>Result of x{i + 1} is {math.det(x[i]).toFixed(10) / det_A}</div>);
-            }
-            this.setState({ ans: ans_x })
-        } catch (error) {
-            this.setState({ ifer: (<div style={{ color: 'red' }}>โปรดใส่ข้อมูลให้ครบ</div>) })
-        }
+    find_x = e => {
 
     }
     render() {
         return (
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
-                <h1 className="header-content" style={{ fontSize: '20px' }}>Cramer</h1>
+                <h1 className="header-content" style={{ fontSize: '20px' }}>GaussElimination Method</h1>
 
                 <div>
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.del_dm} >-</Button></span>
@@ -188,11 +149,8 @@ class Cramer extends React.Component {
                 </div>
 
             </div>
-        );
-
-
+        )
     }
 }
 
-export default Cramer;
-
+export default GuassElimination

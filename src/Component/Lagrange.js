@@ -2,14 +2,14 @@ import React from 'react'
 import {Button , Input} from 'antd'
 import apis from '../Container/API'
 const math = require('mathjs')
-class NewtonDivide extends React.Component{
+class Lagrange extends React.Component{
     state ={
         n:2,
         matrix:[[],[]],
         Point : null,
         x : null,
         y : null,
-        c : [],
+        L : null,
         apiData : null
     }
     async getDataFromAPI(){
@@ -82,58 +82,41 @@ class NewtonDivide extends React.Component{
         }
         let tmpPoint = this.state.Point.split(',')
         tmpPoint = tmpPoint.map((x => (+x)-1))
-        let ans = this.Calculate(tmpPoint,+this.state.x,tmpMt);
-        console.log(ans.C[0])
-        this.setState({y : ans.ans,c : ans.C})
+        let ans = this.Calculate(tmpMt,+this.state.x,tmpPoint);
+        console.log(ans.y)
+        this.setState({y : ans.y })
     }
-    Show_C(){
-        let arr = this.state.c;
-        let arr2 = [];
-        for(let i=0;i<arr.length;i++){
-            arr2.push(<div style={{fontSize:'15px'}}><h1>C[{i+1}] = {arr[i]}</h1></div>)
-        }
-        return(arr2);
-    }
-    Calculate(Point,x,matrix){
-        let n = Point.length
+    Calculate(matrix,x,selectedPoint){
+        let n = selectedPoint.length
         let arrX = []
-        let arrFx = [[]]
-        Point.map(x => {
+        let arrFx = []
+        selectedPoint.map(x => {
             arrX.push(matrix[x][0])
-            arrFx[0].push(matrix[x][1])
+            arrFx.push(matrix[x][1])
         })
-    
-        for(let i=0;i<n-1;i++){
-            let dynamic = []
-            for(let j=0;j<n-i-1;j++){
-                let value = math.bignumber(arrFx[i][j+1])
-                value = math.subtract(value,arrFx[i][j])
-                let temp = math.bignumber(arrX[i+j+1])
-                temp = math.subtract(temp,arrX[j])
-                value = math.divide(value,temp)
-                dynamic.push(value)
+
+        let sum = 0
+        let arrL = []
+        for(let i=0;i<n;i++){
+            let mulUp = 1
+            let mulDown = 1
+            for(let j=0;j<n;j++){
+                if(i!=j){
+                    mulUp = math.multiply(math.subtract(math.bignumber(x), arrX[j]), mulUp)
+                    mulDown = math.multiply(math.subtract(math.bignumber(arrX[i]), arrX[j]), mulDown)
+                }
             }
-            arrFx.push(dynamic)
+            arrL.push(math.divide(mulUp, mulDown).toFixed(20))
+            sum = math.add(sum, math.multiply(math.divide(mulUp, mulDown), arrFx[i]))
         }
-        let arrC = []
-        let sum = math.bignumber(arrFx[0][0]);
-        arrC.push(sum.toFixed(20))
-        let C = math.bignumber(1);
-        for(let i=0;i<n-1;i++){
-            arrC.push(arrFx[i+1][0].toFixed(20))
-            let temp = math.bignumber(x)
-            temp = math.subtract(temp,arrX[i])
-            C = math.multiply(C,temp)
-            temp = math.multiply(C,arrFx[i+1][0])
-            sum = math.add(sum,temp)
-        }
-        return { ans : sum.toString(), C : arrC}
         
+        
+        return {y: sum.toString(), L : arrL}
     }
     render(){
         return(
             <div className="site-layout-background" >
-                <h1 className="header-content">Newton Divide</h1>
+                <h1 className="header-content">Lagrange</h1>
                 <div style={{marginBottom:'10px'}}> 
                     <span style={{marginLeft:'10px'}}><Button type="primary" onClick={this.onClickMinus}>-</Button></span>
                     <span style={{marginLeft:'10px', fontSize:'20px'}}>{this.state.n}</span>
@@ -161,14 +144,12 @@ class NewtonDivide extends React.Component{
                     <Button style={{marginLeft:'px',width:'100px'}} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
                     <Button style={{marginLeft:'5px',width:'100px'}} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
-                <div style={{margin:'5px'}}>
-                    {this.Show_C()}
-                    <h1 style={{fontSize:"20px"}}>f({this.state.x}) = {this.state.y}</h1>
-                </div>
+                <div style={{marginTop:'10px'}}>f({this.state.x}) = {this.state.y}</div>
+                
                 
             </div>
-        );
+        )
     }
 }
 
-export default NewtonDivide;
+export default Lagrange;

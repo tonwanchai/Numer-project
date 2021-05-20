@@ -15,6 +15,13 @@ import Secant from './Component/Secant';
 import Cramer from './Component/Cramer';
 import NewtonDivide from './Component/NewtonDivide';
 import SwaggerAPI from './Container/SwaggerAPI';
+import Spline from './Component/Spline';
+import Lagrange from './Component/Lagrange';
+import GaussElimination from './Component/GaussElimination';
+import GaussJordanMethod from './Component/GaussJordanMethod';
+import GaussSeidel from './Component/GaussSeidel';
+import JacobiIterationMethod from './Component/JacobiIterationMethod';
+import LUdecomposition from './Component/LUdecomposition';
 const { Header, Content, Sider } = Layout;
 class App extends Component {
 
@@ -49,6 +56,13 @@ class App extends Component {
                                     <Route path='/Secant' component={Secant} />
                                     <Route path='/Cramer' component={Cramer} />
                                     <Route path='/NewtonDivide' component={NewtonDivide} />
+                                    <Route path='/Spline' component={Spline} />
+                                    <Route path='/Lagrange' component={Lagrange} />
+                                    <Route path='/GaussElimination' component={GaussElimination} />
+                                    <Route path='/GaussJordanMethod' component={GaussJordanMethod} />
+                                    <Route path='/JacobiIterationMethod' component={JacobiIterationMethod} />
+                                    <Route path='/GaussSeidel' component={GaussSeidel} />
+                                    <Route path='/LUdecomposition' component={LUdecomposition} />
                                     <Route path='/Swagger' component={SwaggerAPI} />
                                 </div>
 

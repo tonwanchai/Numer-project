@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import { Input, Button } from 'antd';
 
 import {equation_func, fixed_fx} from './Equation_Function'
+import apis from '../Container/API'
 class FalsePosition extends Component {
     state = {
         f_x:'',
@@ -11,10 +12,28 @@ class FalsePosition extends Component {
         er:null,
         ifer:null,
         ans:null,
-        check:null,
-        cheak_re:false
+        apiData:null,
+        result:null
     };
-
+    async GetDatafromAPI(){
+        let tmpData = null
+        await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
+        this.setState({apiData:tmpData})
+        console.log(this.state.apiData);
+        let n = this.state.apiData.length;
+        console.log(n);
+        let ranIndex = Math.floor(Math.random() * n); 
+        this.setState({
+            f_x: this.state.apiData[ranIndex]["equation"],
+            xl : this.state.apiData[ranIndex]["xl"],
+            xr : this.state.apiData[ranIndex]["xr"],
+            er : this.state.apiData[ranIndex]["error"],
+        })
+        
+    }
+    onClickExample = e =>{
+        this.GetDatafromAPI()
+    }
     myChangeHandler_f_x = (e) => {
         this.setState({f_x: e.target.value});
     }
@@ -111,28 +130,24 @@ class FalsePosition extends Component {
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
                 <h1 className="header-content">FalsePosition Method</h1>
                 <div> 
-                    <span><Input placeholder="x^4-13" style={{width:'364px'}} onChange={this.myChangeHandler_f_x}/></span>
+                    <span><Input placeholder="x^4-13" style={{width:'364px'}} onChange={this.myChangeHandler_f_x} value={this.state.f_x}/></span>
                     <span style={{marginLeft:'10px'}}><Button type="primary" onClick={this.find_x}>Calculation</Button></span>
                     {this.state.ifer}
                 </div>
                 <div style={{marginTop:'5px'}}>
                     <span>XL =</span>
-                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="1.5" style={{width:'57px'}} onChange={this.myChangeHandler_xl}/></span>
+                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="1.5" style={{width:'57px'}} onChange={this.myChangeHandler_xl} value={this.state.xl}/></span>
                     <span>XR =</span>
-                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="2" style={{width:'57px'}} onChange={this.myChangeHandler_xr}/></span>
+                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="2" style={{width:'57px'}} onChange={this.myChangeHandler_xr} value={this.state.xr}/></span>
                     <span>Error =</span>
-                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0.00001" style={{width:'100px'}} onChange={this.myChangeHandler_er}/></span>
+                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0.00001" style={{width:'100px'}} onChange={this.myChangeHandler_er} value={this.state.er}/></span>
+                </div>
+                <div>
+                    <Button style={{marginLeft:'5px',width:'100px',marginTop:'5px'}} type='primary' onClick={this.onClickExample}>Example</Button>
+                    {this.state.showApiData}
                 </div>
                 <div style={{marginTop:'20px'}}>
                     {this.state.x}
-                </div>
-                <div>
-                    <span ><Button type="primary" onClick={this.check_result}>Check Result</Button></span>
-                    
-                </div>
-                <div>
-                    <span>{this.state.f_x}</span>
-                    <span>{this.state.check}</span>
                 </div>
             </div>
         )

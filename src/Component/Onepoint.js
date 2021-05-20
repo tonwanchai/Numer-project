@@ -1,14 +1,35 @@
 import React,{Component} from 'react';
 import {Button,Input} from 'antd';
-import { equation_func, fixed_fx } from './Equation_Function';
 
+import apis from '../Container/API'
 class Onepoint extends Component {
     state = {
         f_x:'',
         x_s:null,
         Er:null,
         x:null,
-        ifer:null
+        ifer:null,
+        ans:null,
+        apiData:null,
+        result:null
+    }
+    async GetDatafromAPI(){
+        let tmpData = null
+        await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
+        this.setState({apiData:tmpData})
+        console.log(this.state.apiData);
+        let n = this.state.apiData.length;
+        console.log(n);
+        let ranIndex = Math.floor(Math.random() * n); 
+        this.setState({
+            f_x: this.state.apiData[ranIndex]["equation"],
+            x_s:this.state.apiData[ranIndex]["initial_x"],
+            er : this.state.apiData[ranIndex]["error"],
+        })
+        
+    }
+    onClickExample = e =>{
+        this.GetDatafromAPI()
     }
     myChangeHandler_f_x = (e) => {
         this.setState({f_x: e.target.value});
@@ -20,50 +41,58 @@ class Onepoint extends Component {
         this.setState({Er: e.target.value});
     }
     find_x = e =>{
-        let f_x = this.state.f_x;
-        let x_s = parseFloat(this.state.x_s);
-        let Er = parseFloat(this.state.Er);
-        let Err = 999999;
-        let arr = [];
-        try{
-            f_x = fixed_fx(f_x);
-           
-            let i = 1;
-            let x_new = 0;
-            while(Err > Er){
-                
-                x_new = equation_func(x_s,f_x);
-                console.log(x_new);
-                Err = Math.abs((x_new-x_s)/x_new);
-                x_s = x_new;
-                arr.push(<div style={{fontSize:'25px'}}>
-                <span style={{display:'inline-block',width:'40%'}}>Iteration {i}: x is {x_new}</span>
-                <span>Error : {Err.toFixed(15)}</span>
-                </div>);
-                 i++;
+        
+        const math = require('mathjs')
+        let fx = math.parse(this.state.f_x).compile()
+        let x = math.bignumber(this.state.x_s)
+        let error = math.bignumber(this.state.er)
+        let checkError = math.bignumber(Number.MAX_VALUE)
+        let newX = x
+        let arr = []
+        let iteration = 1
+
+        while (math.larger(checkError, error)) {
+
+            newX = fx.evaluate({x:x})
+            let newCheckError = math.abs(math.divide(math.subtract(newX, x), newX))
+            if(iteration > 500 || (iteration > 5 && math.equal(checkError, 1))){
+                arr = []
+                arr.push(<div style={{fontSize:'40px',fontWeight:'bold'}}>สมการนี้เป็น ลู่ออก</div>)
+                this.setState({x:arr})
+                return;
             }
-            arr.push(<div style={{fontSize:'40px',fontWeight:'bold'}}>Result of x is {x_new}</div>);
-            this.setState({x:arr})  
+            checkError = newCheckError
+            console.log(checkError.toString())
+            x = newX
+            arr.push(<div style={{fontSize:'25px'}}>
+                        <span style={{display:'inline-block',width:'40%'}}>Iteration {iteration}: x is {parseFloat(x)}</span>
+                        <span>Error : {checkError.toFixed(15)}</span>
+                    </div>);
+            iteration = iteration + 1
         }
-        catch (error){
-            this.setState({ifer:(<div style={{color:'red'}}>ใส่ฟังก์ชั่นไม่ถูกต้อง</div>)})
-        }   
+        arr.push(<div style={{fontSize:'40px',fontWeight:'bold'}}>Result of x is {parseFloat(x)}</div>);
+        this.setState({x:arr});
+
     }
     render(){
         return(
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
                 <h1 className="header-content">OnepointIteration Method</h1>
                 <div> 
-                    <span><Input placeholder="x^4-13" style={{width:'364px'}} onChange={this.myChangeHandler_f_x}/></span>
+                    <span><Input placeholder="x^4-13" style={{width:'364px'}} onChange={this.myChangeHandler_f_x} value={this.state.f_x}/></span>
                     <span style={{marginLeft:'10px'}}><Button type="primary" onClick={this.find_x}>Calculation</Button></span>
                     {this.state.ifer}
                 </div>
                 <div style={{marginTop:'5px'}}>
                     <span>X_s =</span>
-                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0" style={{width:'57px'}} onChange={this.myChangeHandler_x_s}/></span>
+                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0" style={{width:'57px'}} onChange={this.myChangeHandler_x_s} value={this.state.x_s}/></span>
                     <span>Error =</span>
-                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0.000001" style={{width:'80px'}} onChange={this.myChangeHandler_Er}/></span>
+                    <span style={{marginLeft:'5px', marginRight:'5px'}}><Input placeholder="0.000001" style={{width:'80px'}} onChange={this.myChangeHandler_Er} value={this.state.er}/></span>
                     
+                </div>
+                <div>
+                    <Button style={{marginLeft:'5px',width:'100px',marginTop:'5px'}} type='primary' onClick={this.onClickExample}>Example</Button>
+                  
                 </div>
                 <div style={{marginTop:'20px'}}>
                     {this.state.x}

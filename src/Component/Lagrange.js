@@ -115,8 +115,8 @@ class Lagrange extends React.Component{
     }
     render(){
         return(
-            <div className="site-layout-background" >
-                <h1 className="header-content">Lagrange</h1>
+            <div className="site-layout-background"  style={{ padding: 24, textAlign: 'left' }}>
+                <h1 className="header-content" >Lagrange</h1>
                 <div style={{marginBottom:'10px'}}> 
                     <span style={{marginLeft:'10px'}}><Button type="primary" onClick={this.onClickMinus}>-</Button></span>
                     <span style={{marginLeft:'10px', fontSize:'20px'}}>{this.state.n}</span>

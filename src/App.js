@@ -1,4 +1,4 @@
-import { Layout} from 'antd';
+import { Layout, Button } from 'antd';
 
 import './lay.css'
 import Siderbar from './siderbar';
@@ -26,12 +26,14 @@ const { Header, Content, Sider } = Layout;
 class App extends Component {
 
     render() {
-        
+
         return (
             <HashRouter>
                 <Layout>
                     <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%', paddingLeft: '5px' }}>
-                        <h1 style={{ color: 'white', textAlign:'center' }}>Numerical Method</h1>
+
+                                <h1 style={{ color: 'white', textAlign: 'center' }}>Numerical Method</h1>
+                                
                     </Header>
                     <Layout>
                         <Sider width={200} className="site-layout-background" style={{
@@ -40,14 +42,15 @@ class App extends Component {
                             marginTop: '64px',
                             position: 'fixed',
                             left: 0,
+
                         }}>
                             <Siderbar />
                         </Sider>
-                        <Layout className="site-layout" style={{ marginLeft: 200, minHeight: '100vh' }}>
+                        <Layout className="site-layout" style={{ marginLeft: 200, minHeight: '100vh', backgroundColor: '#c0c0c0' }}>
                             <Header className="site-layout-background" style={{ padding: 0 }} />
                             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
                                 <div>
-                                   
+
                                     <Route path='/' exact component={Home} />
                                     <Route path='/Bisection' component={Bisection} />
                                     <Route path='/Onepoint' component={Onepoint} />
@@ -73,7 +76,7 @@ class App extends Component {
             </HashRouter>
         )
     }
-   
+
 }
 
 export default App;

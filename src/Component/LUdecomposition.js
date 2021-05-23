@@ -121,6 +121,90 @@ class LUdecomposition extends React.Component {
 
     find_x = e => {
 
+        try {
+            this.setState({ ifer: null })
+            let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B)
+            let arr = []
+            for(let i = 0;i<data.length;i++){
+                arr.push(<div style={{marginTop:'10px',fontSize:'30px'}}>X{i+1} = {data[i]}</div>)
+            }
+            this.setState({dataSource:arr})
+        } catch (error) {
+            this.setState({ ifer: (<div style={{ color: 'red' }}>ใส่ฟังก์ชั่นไม่ถูกต้อง {error}</div>) })
+        }
+
+    }
+    cloneMatrix(initMatrix) {
+        let arr = initMatrix.map(x => [...x])
+        return arr
+    }
+    Calculate(n, initMatrixA, initMatrixB){
+    
+        let matrixA = this.cloneMatrix(initMatrixA)
+        let matrixB = [...initMatrixB]
+        let matrixL = []
+        let matrixU = []
+        let x = []
+        let y = []
+        let data = []
+        
+        for(let i=0;i<n;i++){
+            matrixL.push([])
+            matrixU.push([])
+            x.push(math.bignumber(1))
+            y.push(math.bignumber(1))
+            for(let j=0;j<n;j++){
+                matrixL[i][j] = math.bignumber(0)
+                if(i===j){
+                    matrixU[i][j] = math.bignumber(1)
+                }
+                else{
+                    matrixU[i][j] = math.bignumber(0)
+                }
+            }
+        }
+    
+        for(let i=0;i<n;i++){
+            for(let j=0;j<n;j++){
+                let sum = math.bignumber(0)
+                for(let k=0;k<n;k++){
+                    if(k!==j || i<j){
+                        sum = math.add(sum, math.multiply(matrixL[i][k], matrixU[k][j]))
+                    }
+                }
+                if(i>=j){
+                    sum = math.subtract(matrixA[i][j], sum)
+                    matrixL[i][j] = sum
+                }
+                else{
+                    sum = math.subtract(matrixA[i][j], sum)
+                    matrixU[i][j] = math.divide(sum, matrixL[i][i])
+                }
+            }
+        }
+    
+        for(let i=0;i<n;i++){
+            let sum = math.bignumber(0)
+            for(let j=0;j<n;j++){
+                if(i!==j){
+                    sum = math.add(sum, math.multiply(matrixL[i][j], y[j]))
+                }
+            }
+            y[i] = math.divide(math.subtract(matrixB[i], sum), matrixL[i][i])
+        }
+    
+        for(let i=n-1;i>=0;i--){
+            let sum = math.bignumber(0)
+            for(let j=0;j<n;j++){
+                if(i!==j){
+                    sum = math.add(sum , math.multiply(matrixU[i][j], x[j]))
+                }
+            }
+            x[i] = math.divide(math.subtract(y[i], sum), matrixU[i][i])
+            data[i]=  math.round(x[i],15).toString()
+        }
+    
+        return data 
     }
     render() {
         return (
@@ -146,7 +230,7 @@ class LUdecomposition extends React.Component {
                 </div>
 
                 <div>
-                    {this.state.ans}
+                {this.state.dataSource}
                 </div>
 
             </div>

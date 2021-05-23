@@ -46,7 +46,7 @@ class App extends Component {
                         }}>
                             <Siderbar />
                         </Sider>
-                        <Layout className="site-layout" style={{ marginLeft: 200, minHeight: '100vh', backgroundColor: '#c0c0c0' }}>
+                        <Layout className="site-layout" style={{ marginLeft: 200, minHeight: '100vh' }}>
                             <Header className="site-layout-background" style={{ padding: 0 }} />
                             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
                                 <div>

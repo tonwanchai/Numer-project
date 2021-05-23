@@ -11,7 +11,8 @@ class GaussJordanMethod extends React.Component {
         ans: null,
         matrix_A: [[], [], []],
         matrix_B: [null, null, null],
-        ifer: null
+        ifer: null,
+        dataSource: []
     }
     async GetDatafromAPI() {
         let tmpData = null
@@ -117,6 +118,68 @@ class GaussJordanMethod extends React.Component {
         this.setState({ matrix_B: arr_b });
         //console.log(arr_a);
     }
+    find_x = e => {
+
+        try {
+            this.setState({ ifer: null })
+            let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B)
+            let arr = []
+            for(let i = 0;i<data.length;i++){
+                arr.push(<div style={{marginTop:'10px',fontSize:'30px'}}>X{i+1} = {data[i]}</div>)
+            }
+            this.setState({dataSource:arr})
+        } catch (error) {
+            this.setState({ ifer: (<div style={{ color: 'red' }}>ใส่ฟังก์ชั่นไม่ถูกต้อง {error}</div>) })
+        }
+
+    }
+    cloneMatrix(initMatrix) {
+        let arr = initMatrix.map(x => [...x])
+        return arr
+    }
+    Calculate(n, initMatrixA, initMatrixB) {
+
+        let matrixA = this.cloneMatrix(initMatrixA)
+        let matrixB = [...initMatrixB]
+        let data = []
+        let x = []
+
+        for (let i = 1; i < n; i++) {
+            for (let j = i; j < n; j++) {
+
+                let divide = math.bignumber(matrixA[i - 1][i - 1])
+                let multi = math.bignumber(matrixA[j][i - 1])
+
+                for (let k = i - 1; k < n; k++) {
+                    matrixA[j][k] = math.subtract(matrixA[j][k], math.multiply(math.divide(matrixA[i - 1][k], divide), multi))
+                }
+
+                matrixB[j] = math.subtract(matrixB[j], math.multiply(math.divide(matrixB[i - 1], divide), multi))
+            }
+        }
+
+        for (let i = n - 2; i >= 0; i--) {
+
+            for (let j = i; j >= 0; j--) {
+
+                let divide = math.bignumber(matrixA[i + 1][i + 1])
+                let multi = math.bignumber(matrixA[j][i + 1])
+
+                for (let k = n - 1; k >= i; k--) {
+                    matrixA[j][k] = math.subtract(matrixA[j][k], math.multiply(math.divide(matrixA[i + 1][k], divide), multi))
+                }
+                matrixB[j] = math.subtract(matrixB[j], math.multiply(math.divide(matrixB[i + 1], divide), multi))
+            }
+        }
+
+        for (let i = 0; i < n; i++) {
+            x.push(math.divide(matrixB[i], matrixA[i][i]))
+            data.push( math.round(x[i], 15).toString() )
+        }
+
+        return  data 
+    }
+
     render() {
         return (
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
@@ -141,7 +204,7 @@ class GaussJordanMethod extends React.Component {
                 </div>
 
                 <div>
-                    {this.state.ans}
+                    {this.state.dataSource}
                 </div>
 
             </div>

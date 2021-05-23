@@ -3,7 +3,7 @@ import { identity } from 'mathjs';
 import React from 'react';
 
 class Home extends React.Component {
-    state ={
+  /*  state ={
         text:'',
         text2:' '
     }
@@ -38,14 +38,14 @@ class Home extends React.Component {
         }
         console.log(ans);
         this.setState({text2:ans})
-    }
+    }*/
     render(){
         return(
             <div >
                 <h1 style={{fontSize:'100px',textAlign:'center'}}>Hello</h1>
-                <div style={{marginTop:'5px'}}><center><Input placeholder='kltkdy7uy[' style={{width:'300px',textAlign:'center'}} onChange={this.changetext}></Input></center></div>
+              {/*  <div style={{marginTop:'5px'}}><center><Input placeholder='kltkdy7uy[' style={{width:'300px',textAlign:'center'}} onChange={this.changetext}></Input></center></div>
                 <div style={{marginTop:'5px'}}><center><Button type='primary' onClick={this.convert}>แปลง</Button></center></div>
-                <div style={{marginTop:'5px' , fontSize:"30px"}}><center>{this.state.text2}</center></div>
+        <div style={{marginTop:'5px' , fontSize:"30px"}}><center>{this.state.text2}</center></div> */}
             </div>
         );
     }

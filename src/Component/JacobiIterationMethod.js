@@ -12,6 +12,9 @@ class JacobiIterationMethod extends React.Component {
         ans: null,
         matrix_A: [[], [], []],
         matrix_B: [null, null, null],
+        matrix_X: [null,null,null],
+        error:null,
+        
         ifer: null
     }
     async GetDatafromAPI() {
@@ -26,7 +29,8 @@ class JacobiIterationMethod extends React.Component {
             n: this.state.apiData[0]['n'],
             matrix_A: this.state.apiData[0]['matrixA'],
             matrix_B: this.state.apiData[0]['matrixB'],
-
+            error: this.state.apiData[0]['error'],
+         
         })
 
     }
@@ -55,6 +59,15 @@ class JacobiIterationMethod extends React.Component {
         }
         return (arr);
     }
+    ShowMatrix_X_s = e => {
+        let arr = []
+        let number = this.state.matrix_X;
+        for (let i = 0; i < this.state.n; i++) {
+            arr.push(<span style={{ margin: '2.5px' }}><Input name={(i).toString()} style={{ width: '50px', textAlign: 'center' }} onChange={this.onChangeX} autocomplete="off" value={number[i]} /></span>)
+            arr.push(<div style={{ margin: '5px' }}></div>)
+        }
+        return (arr);
+    }
     ShowMatrix_B = e => {
         let arr = []
         let number = this.state.matrix_B;
@@ -68,7 +81,7 @@ class JacobiIterationMethod extends React.Component {
     onChangeMatrix = e => {
         let tmpIndex = e.target.name.split(" ");
         let tmpMt = this.state.matrix_A;
-        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] = e.target.value;
+        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] =  e.target.value;
         this.setState({ matrix_A: tmpMt });
     }
     onChangeMatrix_B = e => {
@@ -78,6 +91,17 @@ class JacobiIterationMethod extends React.Component {
         arr[index] = e.target.value;
         //console.log(name);
         this.setState({ matrix_B: arr });
+    }
+    onChangeError = e =>{
+        this.setState({error:e.target.value})
+    }
+    onChangeX = e =>{
+        let name = e.target.name.toString();
+        let arr = this.state.matrix_X;
+        let index = parseInt(name);
+        arr[index] = e.target.value;
+        //console.log(name);
+        this.setState({ matrix_X: arr });
     }
     add_dm = (e) => {
         let n = this.state.n
@@ -89,13 +113,16 @@ class JacobiIterationMethod extends React.Component {
         }
         let arr_a = this.state.matrix_A;
         let arr_b = this.state.matrix_B;
+        let arr_x = this.state.matrix_X;
         arr_a.push([]);
         arr_b.push(null);
+        arr_x.push(null);
         for (let i = 0; i < n + 1; i++) {
             arr_a[i].push(null);
         }
         this.setState({ matrix_A: arr_a });
         this.setState({ matrix_B: arr_b });
+        this.setState({ matrix_X: arr_x });
         //console.log(arr_a);
     }
 
@@ -109,14 +136,85 @@ class JacobiIterationMethod extends React.Component {
         }
         let arr_a = this.state.matrix_A;
         let arr_b = this.state.matrix_B;
+        let arr_x = this.state.matrix_X;
         arr_a.pop();
         arr_b.pop();
+        arr_x.pop();
         for (let i = 0; i < n - 1; i++) {
             arr_a[i].pop();
         }
         this.setState({ matrix_A: arr_a });
         this.setState({ matrix_B: arr_b });
+        this.setState({ matrix_X: arr_x });
         //console.log(arr_a);
+    }
+    find_x = e => {
+
+        try {
+            this.setState({ ifer: null })
+            let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B,this.state.error,this.state.matrix_X)
+            let arr = []
+            for(let i = 0;i<data.length;i++){
+                arr.push(<div style={{marginTop:'10px',fontSize:'30px'}}>X{i+1} = {data[i]}</div>)
+            }
+            this.setState({dataSource:arr})
+        } catch (error) {
+            this.setState({ ifer: (<div style={{ color: 'red' }}>ใส่ฟังก์ชั่นไม่ถูกต้อง {error}</div>) })
+        }
+
+    }
+    cloneMatrix(initMatrix) {
+        let arr = initMatrix.map(x => [...x])
+        return arr
+    }
+    Calculate(n, initMatrixA, initMatrixB, initError, initMatrixX){
+    
+        let MatrixA = this.cloneMatrix(initMatrixA)
+        let MatrixB = [...initMatrixB]
+        let error = parseFloat(initError)
+        let x = [...initMatrixX]
+        for(let i = 0 ; i< n ;i++){
+            x[i] = parseInt(x[i])
+        }
+        let tmpX = [...x]
+        let data = []
+        let checkError = true
+        let iteration = 1
+        console.log(MatrixA)
+        console.log(MatrixB)
+        console.log(x)
+        while(checkError){
+    
+            
+    
+            checkError = false
+    
+            for(let i=0;i<n;i++){
+                
+                let sum = 0
+                for(let j=0;j<n;j++){
+                    if(i!==j){
+                        sum = sum + MatrixA[i][j]*x[j]
+                        
+                    }
+                }
+                //console.log(sum)
+
+               
+                tmpX[i] = math.multiply(MatrixB[i]-sum,MatrixA[i][i])
+                
+                let tmpErr = Math.abs((tmpX[i]-x[i])/tmpX[i])
+                console.log(tmpErr)
+                if(tmpErr > error){
+                    checkError = true
+                }
+                
+            }
+            x = tmpX.map(x => x)
+            iteration = iteration + 1
+        }
+        x.map((x, i) => data.push (math.round(x,15).toString()))
+        return  data 
     }
     render() {
         return (
@@ -134,15 +232,20 @@ class JacobiIterationMethod extends React.Component {
                         <div style={{ alignItems: 'center' }}>{this.ShowMatrix_A()}</div>
                         <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X()}</div>
                         <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_B()}</div>
+                        <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X_s()}</div>
                     </div>
-
+                    <div>
+                        Error = 
+                        <span><Input style={{width:'100px',marginLeft: '5px',marginRight:'5px'}} placeholder='0.000001' onChange={this.onChangeError} value={this.state.error}></Input></span>
+                      
+                    </div>
                     <div>
                         <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                         <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.find_x}>Calculate</Button>
                     </div>
 
                     <div>
-                        {this.state.ans}
+                        {this.state.dataSource}
                     </div>
 
                 </div>

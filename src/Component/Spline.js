@@ -9,7 +9,8 @@ class Spline extends React.Component{
         Point : null,
         x : null,
         y : null,
-        apiData : null
+        apiData : null,
+        ifer:null
     }
     async getDataFromAPI(){
         let tmpData = null
@@ -72,6 +73,11 @@ class Spline extends React.Component{
         this.setState({x : e.target.value}); // 2.5
     }
     onClickCalculation = e =>{
+        this.setState({ifer:null})
+        if(this.state.x === null){
+            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            return
+        }
         let tmpMt = [];
         for(let i = 0 ; i<this.state.n;i++){
             tmpMt.push([]);
@@ -85,6 +91,7 @@ class Spline extends React.Component{
     }
 
     Calculate(matrix,x){
+        
         let Spline = require('cubic-spline');
 
         let xs = []
@@ -131,6 +138,9 @@ class Spline extends React.Component{
                 <div style={{margin:'5px'}}>
                     <Button style={{marginLeft:'px',width:'100px'}} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
                     <Button style={{marginLeft:'5px',width:'100px'}} type='primary' onClick={this.onClickExample}>Example</Button>
+                </div>
+                <div>
+                    {this.state.ifer}
                 </div>
                 <div style={{margin:'5px'}}>
                  

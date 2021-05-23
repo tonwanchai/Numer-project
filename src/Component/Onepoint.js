@@ -22,9 +22,9 @@ class Onepoint extends Component {
         console.log(n);
         let ranIndex = Math.floor(Math.random() * n); 
         this.setState({
-            f_x: this.state.apiData[ranIndex]["equation"],
-            x_s:this.state.apiData[ranIndex]["initial_x"],
-            er : this.state.apiData[ranIndex]["error"],
+            f_x: this.state.apiData[2]["equation"],
+            x_s:this.state.apiData[2]["initial_x"],
+            er : this.state.apiData[2]["error"],
         })
         
     }
@@ -41,7 +41,11 @@ class Onepoint extends Component {
         this.setState({Er: e.target.value});
     }
     find_x = e =>{
-        
+        this.setState({ifer:null})
+        if(this.state.f_x === ''){
+            this.setState({ifer:(<div style={{color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            return
+        }
         const math = require('mathjs')
         let fx = math.parse(this.state.f_x).compile()
         let x = math.bignumber(this.state.x_s)

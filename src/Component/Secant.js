@@ -51,6 +51,11 @@ class Secant extends Component {
     }
 
     Calculate = e =>{
+        
+        if(this.state.f_x === null){
+            this.setState({ifer:(<div style={{color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            return
+        }
         try{
             this.setState({ifer:null})
             let f_x = this.state.f_x;

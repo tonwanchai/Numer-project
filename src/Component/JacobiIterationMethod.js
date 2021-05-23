@@ -30,6 +30,7 @@ class JacobiIterationMethod extends React.Component {
             matrix_A: this.state.apiData[0]['matrixA'],
             matrix_B: this.state.apiData[0]['matrixB'],
             error: this.state.apiData[0]['error'],
+            matrix_X: this.state.apiData[0]['init_x']
          
         })
 
@@ -149,7 +150,11 @@ class JacobiIterationMethod extends React.Component {
         //console.log(arr_a);
     }
     find_x = e => {
-
+        
+        if(this.state.error === null){
+            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            return
+        }
         try {
             this.setState({ ifer: null })
             let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B,this.state.error,this.state.matrix_X)
@@ -225,7 +230,7 @@ class JacobiIterationMethod extends React.Component {
                         <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.del_dm} >-</Button></span>
                         <span style={{ marginLeft: '10px' }}>{this.state.n} x {this.state.n}</span>
                         <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.add_dm} >+</Button></span>
-                        {this.state.ifer}
+                        
                     </div>
 
                     <div style={{ display: 'flex', flexFlow: 'row', marginTop: '5px' }}>
@@ -243,7 +248,7 @@ class JacobiIterationMethod extends React.Component {
                         <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                         <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.find_x}>Calculate</Button>
                     </div>
-
+                    <div>{this.state.ifer}</div>
                     <div>
                         {this.state.dataSource}
                     </div>

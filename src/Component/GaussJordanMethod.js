@@ -119,13 +119,17 @@ class GaussJordanMethod extends React.Component {
         //console.log(arr_a);
     }
     find_x = e => {
-
+       
+        if(this.state.matrix_B[0] === null){
+            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            return
+        }
         try {
             this.setState({ ifer: null })
             let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B)
             let arr = []
             for(let i = 0;i<data.length;i++){
-                arr.push(<div style={{marginTop:'10px',fontSize:'30px'}}>X{i+1} = {data[i]}</div>)
+                arr.push(<div style={{marginTop:'10px' ,fontSize: '40px', fontWeight: 'bold' }}>Result of x{i + 1} is {data[i]}</div>)
             }
             this.setState({dataSource:arr})
         } catch (error) {
@@ -189,7 +193,7 @@ class GaussJordanMethod extends React.Component {
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.del_dm} >-</Button></span>
                     <span style={{ marginLeft: '10px' }}>{this.state.n} x {this.state.n}</span>
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.add_dm} >+</Button></span>
-                    {this.state.ifer}
+                    
                 </div>
 
                 <div style={{ display: 'flex', flexFlow: 'row', marginTop: '5px' }}>
@@ -202,7 +206,7 @@ class GaussJordanMethod extends React.Component {
                     <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                     <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.find_x}>Calculate</Button>
                 </div>
-
+                <div>{this.state.ifer}</div>
                 <div>
                     {this.state.dataSource}
                 </div>

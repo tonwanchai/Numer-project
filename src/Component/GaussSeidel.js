@@ -185,7 +185,7 @@ class GaussSeidel extends React.Component {
         while(checkError){
     
     
-             if(iteration > 20){
+             if(iteration > 50){
                  break;
              }
     
@@ -227,8 +227,8 @@ class GaussSeidel extends React.Component {
 
                 <div style={{ display: 'flex', flexFlow: 'row', marginTop: '5px' }}>
                     <div style={{ alignItems: 'center' }}>{this.ShowMatrix_A()}</div>
-                    <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X()}</div>
                     <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_B()}</div>
+                    <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X()}</div>
                     <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X_s()}</div>
                 </div>
                 <div>

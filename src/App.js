@@ -1,4 +1,4 @@
-import { Layout, Button } from 'antd';
+import { Layout } from 'antd';
 
 import './lay.css'
 import Siderbar from './siderbar';

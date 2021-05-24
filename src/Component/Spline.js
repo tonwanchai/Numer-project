@@ -10,7 +10,8 @@ class Spline extends React.Component{
         x : null,
         y : null,
         apiData : null,
-        ifer:null
+        ifer:null,
+        hasClick:false
     }
     async getDataFromAPI(){
         let tmpData = null
@@ -57,7 +58,7 @@ class Spline extends React.Component{
         let tmpMatrix = this.state.matrix;
         for(let i=0;i<this.state.n;i++){
             for(let j=0;j<2;j++){
-                arr.push(<span style={{margin:'2.5px'}}><Input name={(i).toString()+" "+(j).toString()} style={{width:'100px',textAlign:'center'}}  autoComplete="off" value={tmpMatrix[i][j]}/></span>)
+                arr.push(<span style={{margin:'2.5px'}}><Input name={(i).toString()+" "+(j).toString()} style={{width:'100px',textAlign:'center'}} onChange={this.onChangeMatrix} autoComplete="off" value={tmpMatrix[i][j]}/></span>)
             }
             arr.push(<div style={{margin:'5px'}}></div>)
         }
@@ -87,7 +88,7 @@ class Spline extends React.Component{
         }
         let ans = this.Calculate(tmpMt,+this.state.x);
     
-        this.setState({y : ans})
+        this.setState({y : ans , hasClick:true})
     }
 
     Calculate(matrix,x){
@@ -142,11 +143,11 @@ class Spline extends React.Component{
                 <div>
                     {this.state.ifer}
                 </div>
-                <div style={{margin:'5px'}}>
-                 
-                    <h1 style={{fontSize:"20px"}}>f({this.state.x}) = {this.state.y}</h1>
-                </div>
-                
+                {this.state.hasClick ?
+                    <div className="content-text">f({this.state.x}) = {this.state.y}</div>
+                    : null
+                    
+                }
                 
             </div>
         )

@@ -1,8 +1,9 @@
 const config = {
     "swagger": "2.0",
     "info": {
-        "description" : "API Document By Swagger. จัดทำหน้านี้ขึ้นเพื่อรวบรวม API ที่ใช้บนเว็บไซต์นี้",
-        "title": "Swagger Numerical Method"
+        "title": "Swagger Numerical Method",
+        "description" : "API Document By Swagger. จัดทำหน้านี้ขึ้นเพื่อรวบรวม API ที่ใช้บนเว็บไซต์นี้"
+        
     },
     "host": "my-json-server.typicode.com/tonwanchai/numeric-project/",
     
@@ -110,6 +111,48 @@ const config = {
                     "API"
                 ],
                 "summary": "ระบุหมายเลขโจทย์ในเรื่อง Interpolation",
+                "parameters": [
+                    {
+                        "name": "ExampleId",
+                        "in": "path",
+                        "description": "หมายเลขไอดีของโจทย์ตัวอย่าง",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description" : "ทำงานสำเร็จ"
+                    },
+                    "404":{
+                        "description" : "ไม่พบโจทย์"
+                    }
+                }
+            }
+        },
+        "/regression":{
+            "get":{
+                "tags":[
+                    "API"
+                ],
+                "summary": "ค้นหาโจทย์ทั้งหมดในเรื่อง Regression",
+                "responses": {
+                    "200": {
+                        "description" : "ทำงานสำเร็จ"
+                    },
+                    "404":{
+                        "description" : "ไม่พบโจทย์"
+                    }
+                }
+            }
+        },
+        "/regression/{ExampleId}":{
+            "get":{
+                "tags":[
+                    "API"
+                ],
+                "summary": "ระบุหมายเลขโจทย์ในเรื่อง Re gression",
                 "parameters": [
                     {
                         "name": "ExampleId",

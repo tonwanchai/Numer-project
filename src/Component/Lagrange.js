@@ -117,8 +117,8 @@ class Lagrange extends React.Component {
             let mulDown = 1
             for (let j = 0; j < n; j++) {
                 if (i != j) {
-                    mulUp = math.multiply(math.subtract(math.bignumber(x), arrX[j]), mulUp)
-                    mulDown = math.multiply(math.subtract(math.bignumber(arrX[i]), arrX[j]), mulDown)
+                    mulUp = math.multiply(math.subtract(math.bignumber(x), arrX[j]), mulUp)// mulUp = mulUp * (x-arrX[j])
+                    mulDown = math.multiply(math.subtract(math.bignumber(arrX[i]), arrX[j]), mulDown)// mulDown = mulDown * (arrX[i]-arrX[j])
                 }
             }
             arrL.push(math.divide(mulUp, mulDown).toFixed(20))

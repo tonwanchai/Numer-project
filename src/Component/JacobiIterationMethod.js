@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input } from 'antd'
+import { Button, Input ,Table } from 'antd'
 
 import { create, all } from 'mathjs'
 import apis from '../Container/API'
@@ -12,10 +12,29 @@ class JacobiIterationMethod extends React.Component {
         ans: null,
         matrix_A: [[], [], []],
         matrix_B: [null, null, null],
-        matrix_X: [null,null,null],
-        error:null,
-        
-        ifer: null
+        matrix_X: [null, null, null],
+        error: null,
+        ifer: null,
+        columns:[
+            {
+                title:'Iteration',
+                dataIndex:'Iteration',
+                key:'Iteration'
+            },
+            {
+                title:'x',
+                dataIndex:'x',
+                key:'x'
+            },
+            {
+                title:'error',
+                dataIndex:'error',
+                key:'error'
+            }
+
+        ],
+        data:[],
+        dataSource:[]
     }
     async GetDatafromAPI() {
         let tmpData = null
@@ -31,7 +50,7 @@ class JacobiIterationMethod extends React.Component {
             matrix_B: this.state.apiData[0]['matrixB'],
             error: this.state.apiData[0]['error'],
             matrix_X: this.state.apiData[0]['init_x']
-         
+
         })
 
     }
@@ -82,7 +101,7 @@ class JacobiIterationMethod extends React.Component {
     onChangeMatrix = e => {
         let tmpIndex = e.target.name.split(" ");
         let tmpMt = this.state.matrix_A;
-        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] =  e.target.value;
+        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] = e.target.value;
         this.setState({ matrix_A: tmpMt });
     }
     onChangeMatrix_B = e => {
@@ -93,10 +112,10 @@ class JacobiIterationMethod extends React.Component {
         //console.log(name);
         this.setState({ matrix_B: arr });
     }
-    onChangeError = e =>{
-        this.setState({error:e.target.value})
+    onChangeError = e => {
+        this.setState({ error: e.target.value })
     }
-    onChangeX = e =>{
+    onChangeX = e => {
         let name = e.target.name.toString();
         let arr = this.state.matrix_X;
         let index = parseInt(name);
@@ -150,19 +169,22 @@ class JacobiIterationMethod extends React.Component {
         //console.log(arr_a);
     }
     find_x = e => {
-        
-        if(this.state.error === null){
-            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+
+        if (this.state.error === null) {
+            this.setState({ ifer: (<div style={{ fontSize: '30px', color: 'red' }}>โปรดกรอกข้อมูลให้ครบ</div>) })
             return
         }
         try {
             this.setState({ ifer: null })
-            let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B,this.state.error,this.state.matrix_X)
+            let data = this.Calculate(this.state.n, this.state.matrix_A, this.state.matrix_B, this.state.error, this.state.matrix_X)
             let arr = []
-            for(let i = 0;i<data.length;i++){
-                arr.push(<div style={{marginTop:'10px',fontSize:'30px'}}>X{i+1} = {data[i]}</div>)
+            for (let i = 0; i < data.length; i++) {
+                arr.push(<div style={{ marginTop: '10px', fontSize: '30px' }}>X{i + 1} = {data[i]}</div>)
             }
-            this.setState({dataSource:arr})
+          
+        
+            
+            this.setState({ dataSource: arr })
         } catch (error) {
             this.setState({ ifer: (<div style={{ color: 'red' }}>ใส่ฟังก์ชั่นไม่ถูกต้อง {error}</div>) })
         }
@@ -172,88 +194,90 @@ class JacobiIterationMethod extends React.Component {
         let arr = initMatrix.map(x => [...x])
         return arr
     }
-    Calculate(n, initMatrixA, initMatrixB, initError, initMatrixX){
-    
+    Calculate(n, initMatrixA, initMatrixB, initError, initMatrixX) {
+
         let MatrixA = this.cloneMatrix(initMatrixA)
         let MatrixB = [...initMatrixB]
         let error = parseFloat(initError)
         let x = [...initMatrixX]
-        for(let i = 0 ; i< n ;i++){
-            x[i] = parseInt(x[i])
-        }
         let tmpX = [...x]
         let data = []
         let checkError = true
         let iteration = 1
-        console.log(MatrixA)
-        console.log(MatrixB)
-        console.log(x)
-        while(checkError){
-    
-            
-    
+
+       
+        while (checkError) {
+
+
+           
             checkError = false
-    
-            for(let i=0;i<n;i++){
-                
+            
+            
+            for (let i = 0; i < n; i++) {
+
                 let sum = 0
-                for(let j=0;j<n;j++){
-                    if(i!==j){
-                        sum = sum + MatrixA[i][j]*x[j]
-                        
+                for (let j = 0; j < n; j++) {
+                    if (i !== j) {
+                        sum = sum + MatrixA[i][j] * x[j]
                     }
                 }
-                //console.log(sum)
-
-               
-                tmpX[i] = math.multiply(MatrixB[i]-sum,MatrixA[i][i])
-                
-                let tmpErr = Math.abs((tmpX[i]-x[i])/tmpX[i])
-                console.log(tmpErr)
-                if(tmpErr > error){
+                tmpX[i] = (MatrixB[i] - sum) / MatrixA[i][i]
+                let tmpErr = Math.abs((tmpX[i] - x[i]) / tmpX[i])
+            
+            
+      
+                if (tmpErr > error) {
                     checkError = true
                 }
+            }
+            if(iteration>=20){
                 
+                break;
+
             }
             x = tmpX.map(x => x)
             iteration = iteration + 1
         }
-        x.map((x, i) => data.push (math.round(x,15).toString()))
-        return  data 
+        x.map((x, i) => data.push(math.round(x, 15).toString()))
+         
+        return data 
     }
     render() {
         return (
-                <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
-                    <h1 className="header-content" style={{ fontSize: '20px' }}>JacobiIteration Method</h1>
+            <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
+                <h1 className="header-content" style={{ fontSize: '20px' }}>JacobiIteration Method</h1>
 
-                    <div>
-                        <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.del_dm} >-</Button></span>
-                        <span style={{ marginLeft: '10px' }}>{this.state.n} x {this.state.n}</span>
-                        <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.add_dm} >+</Button></span>
-                        
-                    </div>
-
-                    <div style={{ display: 'flex', flexFlow: 'row', marginTop: '5px' }}>
-                        <div style={{ alignItems: 'center' }}>{this.ShowMatrix_A()}</div>
-                        <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X()}</div>
-                        <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_B()}</div>
-                        <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X_s()}</div>
-                    </div>
-                    <div>
-                        Error = 
-                        <span><Input style={{width:'100px',marginLeft: '5px',marginRight:'5px'}} placeholder='0.000001' onChange={this.onChangeError} value={this.state.error}></Input></span>
-                      
-                    </div>
-                    <div>
-                        <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
-                        <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.find_x}>Calculate</Button>
-                    </div>
-                    <div>{this.state.ifer}</div>
-                    <div>
-                        {this.state.dataSource}
-                    </div>
+                <div>
+                    <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.del_dm} >-</Button></span>
+                    <span style={{ marginLeft: '10px' }}>{this.state.n} x {this.state.n}</span>
+                    <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.add_dm} >+</Button></span>
 
                 </div>
+
+                <div style={{ display: 'flex', flexFlow: 'row', marginTop: '5px' }}>
+                    <div style={{ alignItems: 'center' }}>{this.ShowMatrix_A()}</div>
+                    <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_B()}</div>
+                    <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X()}</div>
+                    <div style={{ alignItems: 'center', marginLeft: '30px' }}>{this.ShowMatrix_X_s()}</div>
+                </div>
+                <div>
+                    Error =
+                        <span><Input style={{ width: '100px', marginLeft: '5px', marginRight: '5px' }} placeholder='0.000001' onChange={this.onChangeError} value={this.state.error}></Input></span>
+
+                </div>
+                <div>
+                    <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
+                    <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.find_x}>Calculate</Button>
+                </div>
+                <div>{this.state.ifer}</div>
+              {/*  <div>
+                  _  <Table columns={this.state.columns} dataSource={this.state.data} />
+              </div>*/} 
+                <div>
+                    {this.state.dataSource}
+                </div>
+
+            </div>
         )
     }
 }

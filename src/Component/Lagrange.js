@@ -58,7 +58,7 @@ class Lagrange extends React.Component {
         let tmpMatrix = this.state.matrix;
         for (let i = 0; i < this.state.n; i++) {
             for (let j = 0; j < 2; j++) {
-                arr.push(<span style={{ margin: '2.5px' }}><Input name={(i).toString() + " " + (j).toString()} style={{ width: '100px', textAlign: 'center' }} autoComplete="off" value={tmpMatrix[i][j]} /></span>)
+                arr.push(<span style={{ margin: '2.5px' }}><Input name={(i).toString() + " " + (j).toString()} style={{ width: '100px', textAlign: 'center' }} autoComplete="off" onChange={this.onChangeMatrix} value={tmpMatrix[i][j]} /></span>)
             }
             arr.push(<div style={{ margin: '5px' }}></div>)
         }

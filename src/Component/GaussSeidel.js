@@ -26,11 +26,11 @@ class GaussSeidel extends React.Component {
         console.log(n);
         let ranIndex = Math.floor(Math.random() * n);
         this.setState({
-            n: this.state.apiData[0]['n'],
-            matrix_A: this.state.apiData[0]['matrixA'],
-            matrix_B: this.state.apiData[0]['matrixB'],
-            error: this.state.apiData[0]['error'],
-            matrix_X: this.state.apiData[0]['init_x']
+            n: this.state.apiData[1]['n'],
+            matrix_A: this.state.apiData[1]['matrixA'],
+            matrix_B: this.state.apiData[1]['matrixB'],
+            error: this.state.apiData[1]['error'],
+            matrix_X: this.state.apiData[1]['init_x']
         })
 
     }
@@ -184,14 +184,10 @@ class GaussSeidel extends React.Component {
     
         while(checkError){
     
-           //if(iteration > 500){
-           //    x.map((x, i) => data.push({value: "ไม่สามารถหาค่าได้"}))
-           //    return { data }
-           //}
     
-            // if(iteration > 10){
-            //     break;
-            // }
+             if(iteration > 20){
+                 break;
+             }
     
             checkError = false
     

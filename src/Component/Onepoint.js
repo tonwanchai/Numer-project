@@ -18,9 +18,7 @@ class Onepoint extends Component {
         await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
         this.setState({apiData:tmpData})
         console.log(this.state.apiData);
-        let n = this.state.apiData.length;
-        console.log(n);
-        let ranIndex = Math.floor(Math.random() * n); 
+        
         this.setState({
             f_x: this.state.apiData[2]["equation"],
             x_s:this.state.apiData[2]["initial_x"],

@@ -13,12 +13,13 @@ class PolymomialRegression extends React.Component {
         let tempData = null
         await apis.getAllRegression().then(res => (tempData = res.data));
         this.setState({apiData:tempData})
-        console.log(tempData)
+        
         this.setState({
             n:this.state.apiData[0]['n'],
             matrix:this.state.apiData[0]['matix'],
             x:this.state.apiData[0]['x']
         })
+        console.log(this.state.apiData);
     }
     onClickEample = e =>{
         this.getDatafromAPI();
@@ -34,7 +35,7 @@ class PolymomialRegression extends React.Component {
    
     onClickPlus = e => {
         let tempMt = this.state.matrix;
-        if (this.state.n < 8) {
+        if (this.state.n < 9) {
             this.setState({ n: this.state.n + 1 });
             tempMt.push([])
         }
@@ -45,6 +46,9 @@ class PolymomialRegression extends React.Component {
         let tmpMt = this.state.matrix;
         tmpMt[parseInt(getIndex[0])][parseInt(getIndex[1])] = e.target.value;
         this.setState({ matrix: tmpMt });
+    }
+    onChangeX = e => {
+        this.setState({ x: e.target.value }); 
     }
     ShowMatrix = e => {
         let arr = []
@@ -79,7 +83,7 @@ class PolymomialRegression extends React.Component {
 
                 <div style={{ margin: '5px' }}>
                     กำหนดค่า x :
-                <Input style={{ marginLeft: '39px', width: '100px' }}  placeholder="2.5"></Input>
+                <Input style={{ marginLeft: '39px', width: '100px' }} onChange={this.onChangeX} placeholder="2.5" value={this.state.x}></Input>
                 </div>
 
                 <div style={{ margin: '5px' }}>

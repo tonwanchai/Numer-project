@@ -13,7 +13,7 @@ class NewtonDivide extends React.Component {
         apiData: null,
         ifer:null
     }
-    async getDataFromAPI() {
+    async getDatafromAPI() {
         let tmpData = null
         await apis.getAllInterpolation().then(res => (tmpData = res.data));
         this.setState({ apiData: tmpData })
@@ -25,7 +25,7 @@ class NewtonDivide extends React.Component {
         })
     }
     onClickExample = e => {
-        this.getDataFromAPI()
+        this.getDatafromAPI()
     }
     // ลดขนาด matrix
     onClickMinus = e => {

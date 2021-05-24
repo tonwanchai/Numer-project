@@ -204,7 +204,7 @@ class LUdecomposition extends React.Component {
                 }
             }
             x[i] = math.divide(math.subtract(y[i], sum), matrixU[i][i])
-            data[i]=  math.round(x[i],15).toString()
+            data[i] =  math.round(x[i],15).toString()
         }
     
         return data 

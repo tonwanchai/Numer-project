@@ -58,7 +58,7 @@ class NewtonDivide extends React.Component {
         let tmpMatrix = this.state.matrix;
         for (let i = 0; i < this.state.n; i++) {
             for (let j = 0; j < 2; j++) {
-                arr.push(<span style={{ margin: '2.5px' }}><Input name={(i).toString() + " " + (j).toString()} style={{ width: '100px', textAlign: 'center' }} autoComplete="off" value={tmpMatrix[i][j]} /></span>)
+                arr.push(<span style={{ margin: '2.5px' }}><Input name={(i).toString() + " " + (j).toString()} style={{ width: '100px', textAlign: 'center' }} autoComplete="off" onChange={this.onChangeMatrix} value={tmpMatrix[i][j]} /></span>)
             }
             arr.push(<div style={{ margin: '5px' }}></div>)
         }
@@ -89,7 +89,7 @@ class NewtonDivide extends React.Component {
         let tmpPoint = this.state.Point.split(',')
         tmpPoint = tmpPoint.map((x => (+x) - 1))
         let ans = this.Calculate(tmpPoint, +this.state.x, tmpMt);
-        console.log(ans.C[0])
+        console.log(ans.ans)
         this.setState({ y: ans.ans, c: ans.C })
     }
     Show_C() {
@@ -125,6 +125,7 @@ class NewtonDivide extends React.Component {
         let arrC = []
         let sum = math.bignumber(arrFx[0][0]);
         arrC.push(sum.toFixed(20))
+
         let C = math.bignumber(1);
         for (let i = 0; i < n - 1; i++) {
             arrC.push(arrFx[i + 1][0].toFixed(20))

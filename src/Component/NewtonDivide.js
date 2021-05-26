@@ -11,7 +11,8 @@ class NewtonDivide extends React.Component {
         y: null,
         c: [],
         apiData: null,
-        ifer:null
+        ifer:null,
+        hasClick:false
     }
     async getDatafromAPI() {
         let tmpData = null
@@ -90,7 +91,7 @@ class NewtonDivide extends React.Component {
         tmpPoint = tmpPoint.map((x => (+x) - 1))
         let ans = this.Calculate(tmpPoint, +this.state.x, tmpMt);
         console.log(ans.ans)
-        this.setState({ y: ans.ans, c: ans.C })
+        this.setState({ y: ans.ans, c: ans.C ,hasClick:true})
     }
     Show_C() {
         let arr = this.state.c;
@@ -170,10 +171,11 @@ class NewtonDivide extends React.Component {
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
                 <div>{this.state.ifer}</div>
-                <div style={{ margin: '5px' }}>
+                {this.state.hasClick ?
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.state.x}) = {this.state.y}</div>
+                    : null
                     
-                    <h1 style={{ fontSize: "20px" }}>f({this.state.x}) = {this.state.y}</h1>
-                </div>
+                }
 
             </div>
         );

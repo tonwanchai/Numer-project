@@ -23,7 +23,9 @@ import GaussSeidel from './Component/GaussSeidel';
 import JacobiIterationMethod from './Component/JacobiIterationMethod';
 import LUdecomposition from './Component/LUdecomposition';
 import PolymomialRegression from './Component/Regression';
+import MultipleLinear from './Component/MultipleLinearRegression';
 const { Header, Content, Sider } = Layout;
+
 class App extends Component {
 
     render() {
@@ -69,6 +71,7 @@ class App extends Component {
                                     <Route path='/LUdecomposition' component={LUdecomposition} />
                                     <Route path='/PolynomialRegression' component={PolymomialRegression} />
                                     <Route path='/Swagger' component={SwaggerAPI} />
+                                    <Route path='/MultipleLinear' component={MultipleLinear} />
                                 </div>
 
                             </Content>

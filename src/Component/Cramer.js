@@ -123,7 +123,7 @@ class Cramer extends React.Component {
     find_x = (e) => {
         
         if(this.state.matrix_B[0] === null){
-            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
+            this.setState({ifer:(<div style={{color:'red'}}>โปรดกรอกข้อมูลให้ครบ</div>)})
             return
         }
         try {
@@ -160,9 +160,10 @@ class Cramer extends React.Component {
             }
             this.setState({ ans: ans_x })
         } catch (error) {
-            this.setState({ ifer: (<div style={{ color: 'red' }}>โปรดใส่ข้อมูลให้ครบ</div>) })
-        }
 
+            this.setState({ ifer: (<div style={{ color: 'red' }}>โปรดกรอกข้อมูลให้ครบ</div>) })
+        }
+        
     }
     render() {
         return (

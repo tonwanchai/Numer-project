@@ -19,15 +19,12 @@ class FalsePosition extends Component {
         let tmpData = null
         await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
         this.setState({apiData:tmpData})
-        console.log(this.state.apiData);
-        let n = this.state.apiData.length;
-        console.log(n);
-        let ranIndex = Math.floor(Math.random() * n); 
+        
         this.setState({
-            f_x: this.state.apiData[ranIndex]["equation"],
-            xl : this.state.apiData[ranIndex]["xl"],
-            xr : this.state.apiData[ranIndex]["xr"],
-            er : this.state.apiData[ranIndex]["error"],
+            f_x: this.state.apiData[1]["equation"],
+            xl : this.state.apiData[1]["xl"],
+            xr : this.state.apiData[1]["xr"],
+            er : this.state.apiData[1]["error"],
         })
         
     }

@@ -144,7 +144,7 @@ class Spline extends React.Component{
                     {this.state.ifer}
                 </div>
                 {this.state.hasClick ?
-                    <div className="content-text">f({this.state.x}) = {this.state.y}</div>
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.state.x}) = {this.state.y}</div>
                     : null
                     
                 }

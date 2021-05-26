@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Input } from "antd";
 import apis from "../Container/API"
+
 import { create, all } from 'mathjs'
 const config = {}
 const math = create(all, config)
@@ -24,8 +25,8 @@ class MultipleLinear extends React.Component {
         this.setState({
             n:this.state.apiData[1]["n"],
             m:this.state.apiData[1]["m"],
-            Matrix_X:this.state.apiData[1]["Matrix_X"],
-            Matrix_Y:this.state.apiData[1]["Matrix_Y"],
+            Matrix_X:this.state.apiData[1]["matrix_X"],
+            Matrix_Y:this.state.apiData[1]["matrix_Y"],
             ansX:this.state.apiData[1]["x"]
         })
     }
@@ -51,12 +52,7 @@ class MultipleLinear extends React.Component {
         }
 
     }
-    onClickMinus_M = e => {
-        if (this.state.m > 2) {
-            let tmpMatrix_x = this.state.Matrix_X
-        }
-
-    }
+    
     // เพิ่มขนาด matrix
     onClickPlus_N = e => {
         let n = this.state.n;
@@ -152,11 +148,7 @@ class MultipleLinear extends React.Component {
     }
 
     onClickCalculation = e =>{
-        this.setState({ ifer: null })
-        if (this.state.x === null) {
-            this.setState({ ifer: (<div style={{ fontSize: '30px', color: 'red' }}>โปรดกรอกข้อมูลให้ครบ</div>) })
-            return
-        }
+        
         try{
             let tmpMatrix_X=[]
             let tmpMatrix_Y=[];
@@ -164,13 +156,22 @@ class MultipleLinear extends React.Component {
             for(let i=0;i<this.state.n;i++){
                 tmpMatrix_X.push([])
                 for(let j= 0;j<this.state.m;j++){
-                    tmpMatrix_X[i][j] = +tmpMatrix_X[i][j];
+                    tmpMatrix_X[i][j] = +this.state.Matrix_X[i][j];
                 }
-                tmpMatrix_Y = +this.state.Matrix_Y[i];
-                tmpAnsX = +this.ansX;
+                tmpMatrix_Y.push(+this.state.Matrix_Y[i])
+                
             }
+            for(let i = 0 ;i<this.state.m;i++){
+                tmpAnsX.push(+this.state.ansX[i])
+            }
+            console.log(tmpMatrix_X)
+            console.log(tmpAnsX)
+            console.log(tmpMatrix_Y)
+            console.log(+this.state.m)
             let ans = this.Calculate(tmpMatrix_X,tmpMatrix_Y,tmpAnsX,+this.state.m)
-            this.setState({ans:ans,hasClick:true})
+            console.log(ans)
+            this.setState({x:ans,hasClick:true})
+         
         }catch(error){
 
         }
@@ -185,44 +186,46 @@ class MultipleLinear extends React.Component {
     Cal_sum1D(Matrix,index){
         let sum = 0;
         for(let i = 0 ;i<this.state.n;i++){
-            sum = sum+ Matrix[index]
+            sum = sum + Matrix[i]
         }
         return sum
     }
-    Cal_multi1D2D(Matrix_A,index1,Matrix_B,index2){
+    Cal_multi1D2D(Matrix_A,index1,Matrix_B){
         let sum = 0;
         for(let i=0;i<this.state.n;i++){
-            sum = sum+ (Matrix_A[i][index1]*Matrix_B[index2])
+            sum = sum+ (Matrix_A[i][index1]*Matrix_B[i])
         }
         return sum
     }
     Cal_multi2D(Matrix,index1,index2){
         let sum =0;
         for(let i= 0;i<this.state.n;i++){
-            sum = sum+(Matrix[i][index1]+Matrix[i][index2])
+            sum = sum+(Matrix[i][index1]*Matrix[i][index2])
         }
         return sum
         
     }
-    Calculte(Matrix_X,Matrix_Y,Ans_X,m){
+    Calculate(Matrix_X,Matrix_Y,Ans_X,m){
         let d = m+1;
         let tmpArr = []
-        for(let i=0;i<d+1;i++){
+        console.log("Before Loop")
+        for(let i=0;i<d;i++){
             tmpArr.push([]);
             for(let j=0;j<d+1;j++){
                 if(i==0 && j==0){
                     tmpArr[i][j] = this.state.n;
                 }
+                else if(i==0&&j==d){
+                    tmpArr[i][j] = this.Cal_sum1D(Matrix_Y,0)
+                }
                 else if(i==0){
                     tmpArr[i][j] = this.Cal_sum2D(Matrix_X,j-1)
                 }
-                else if(i==0&&j==d-1){
-                    tmpArr[i][j] = this.Cal_sum1D(Matrix_Y,0)
-                }
+                
                 else if(j==0){
                     tmpArr[i][j] = tmpArr[0][i]
                 }
-                else if(j==d-1){
+                else if(j==d){
                     tmpArr[i][j] = this.Cal_multi1D2D(Matrix_X,i-1,Matrix_Y,0)
                 }
                 else{
@@ -230,22 +233,38 @@ class MultipleLinear extends React.Component {
                 }
             }
         }
+        console.log(tmpArr)
+        console.log('completed 1st loop')
         let matrixA = []
         let matrixB = []
         for (let i = 0; i < tmpArr.length; i++) {
             matrixA.push([])
             matrixA[i] = tmpArr[i].slice(0, tmpArr[0].length - 1)
-            matrixB[i] = tmpArr[i][tmpArr[0].length - 1]
+            matrixB[i] = tmpArr[i][tmpArr[0].length-1]
         }
+        console.log('completed 2nd loop',matrixA)
+        console.log('completed 2nd loop',matrixB)
         let invMatrixA = math.inv(matrixA)
+        console.log('Inv_A = ',invMatrixA)
         let matrixC = math.multiply(matrixB, invMatrixA)
-
+        console.log('MatrixC =',matrixC)
         let sum = matrixC[0]
         for (let i = 1; i < matrixC.length; i++) {
             sum = sum + (matrixC[i] * (Ans_X[i-1]))
 
         }
+        console.log('completed 3nd loop')
         return sum;
+    }
+    showFX(){
+        let text = ""
+        let tmpAnsX = this.state.ansX
+
+        tmpAnsX.map(x => {text=text+x+","})
+        
+        text = text.slice(0,text.length-1)
+
+        return text
     }
     render() {
         return (
@@ -280,6 +299,11 @@ class MultipleLinear extends React.Component {
                     <Button style={{ marginLeft: 'px', width: '100px' }} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
+                {this.state.hasClick ?
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.showFX}) = {this.state.x}</div>
+                    : null
+                    
+                }
             </div>
         )
     }

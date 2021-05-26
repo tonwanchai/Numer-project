@@ -36,6 +36,7 @@ class siderbar extends Component{
                             </SubMenu>
                             <SubMenu key="sub4" title="Regression">
                                 <Menu.Item key="16">PolynomialRegression<Link to="/PolynomialRegression" /></Menu.Item>
+                                <Menu.Item key="17">Multiple linear<Link to="/MultipleLinear" /></Menu.Item>
                             </SubMenu>
                         </Menu>
                   

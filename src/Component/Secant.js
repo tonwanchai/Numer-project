@@ -22,14 +22,12 @@ class Secant extends Component {
         await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
         this.setState({apiData:tmpData})
         console.log(this.state.apiData);
-        let n = this.state.apiData.length;
-        console.log(n);
-        let ranIndex = Math.floor(Math.random() * n); 
+        
         this.setState({
-            f_x: this.state.apiData[ranIndex]["equation"],
-            x0:this.state.apiData[ranIndex]["initial_x"],
-            x1:parseFloat(this.state.apiData[ranIndex]["initial_x"])+1.0,
-            er : this.state.apiData[ranIndex]["error"],
+            f_x: this.state.apiData[0]["equation"],
+            x0:this.state.apiData[0]["initial_x"],
+            x1:parseFloat(this.state.apiData[0]["initial_x"])+1.0,
+            er : this.state.apiData[0]["error"],
         })
         
     }

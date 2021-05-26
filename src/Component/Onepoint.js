@@ -8,10 +8,9 @@ class Onepoint extends Component {
         x_s:null,
         Er:null,
         x:null,
-        ifer:null,
-        ans:null,
+        ifer:null,  
         apiData:null,
-        result:null
+        
     }
     async GetDatafromAPI(){
         let tmpData = null
@@ -54,8 +53,7 @@ class Onepoint extends Component {
         let iteration = 1
 
         while (math.larger(checkError, error)) {
-
-            newX = fx.evaluate({x:x})
+            newX = math.bignumber(fx.evaluate({x:math.bignumber(x)}))
             let newCheckError = math.abs(math.divide(math.subtract(newX, x), newX))
             if(iteration > 500 || (iteration > 5 && math.equal(checkError, 1))){
                 arr = []
@@ -67,8 +65,8 @@ class Onepoint extends Component {
             console.log(checkError.toString())
             x = newX
             arr.push(<div style={{fontSize:'25px'}}>
-                        <span style={{display:'inline-block',width:'40%'}}>Iteration {iteration}: x is {parseFloat(x)}</span>
-                        <span>Error : {checkError.toFixed(15)}</span>
+                        <span style={{display:'inline-block',width:'40%'}}>Iteration {iteration}: x is { math.round(x,15).toString()}</span>
+                        <span>Error : {math.round(checkError,15).toString()}</span>
                     </div>);
             iteration = iteration + 1
         }

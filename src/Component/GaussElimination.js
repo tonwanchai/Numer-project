@@ -165,7 +165,7 @@ class GuassElimination extends React.Component {
         for (let i = 0; i < n; i++) {
             x.push(math.bignumber(1))
         }
-
+        console.log(matrixA)
         for (let i = n - 1; i >= 0; i--) {
 
             let sum = math.bignumber(0)

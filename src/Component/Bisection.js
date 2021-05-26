@@ -24,7 +24,6 @@ class BisectionMethod extends React.Component {
         await apis.getAllRootOfEquation().then(res => (tmpData = res.data));
         this.setState({ apiData: tmpData })
         console.log(this.state.apiData);
-        
         this.setState({
             f_x: this.state.apiData[0]["equation"],
             xl: this.state.apiData[0]["xl"],
@@ -71,7 +70,7 @@ class BisectionMethod extends React.Component {
 
             let xm = (xl + xr) / 2;
             let num = equation_func(xm, f_x) * equation_func(xr, f_x);
-
+            
             let tmp_er = 9999999;
             let new_xm = 0;
 

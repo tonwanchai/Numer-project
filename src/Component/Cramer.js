@@ -18,10 +18,7 @@ class Cramer extends React.Component {
         let tmpData = null
         await apis.getAllMatrix().then(res => (tmpData = res.data));
         this.setState({ apiData: tmpData })
-        console.log(this.state.apiData);
-        let n = this.state.apiData.length;
-        console.log(n);
-        let ranIndex = Math.floor(Math.random() * n);
+        
         this.setState({
             n: this.state.apiData[0]['n'],
             matrix_A: this.state.apiData[0]['matrixA'],

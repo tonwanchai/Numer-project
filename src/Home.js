@@ -1,5 +1,5 @@
-import {Input,Button} from 'antd';
-import { identity } from 'mathjs';
+//import {Input,Button} from 'antd';
+//import { identity } from 'mathjs';
 import React from 'react';
 
 class Home extends React.Component {

@@ -175,13 +175,13 @@ class PolymomialRegression extends React.Component {
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }} >
                 <h1 className="header-content">Polymomial Regression</h1>
                 <div style={{ marginBottom: '10px',marginTop:'20px' }}>
-                    <span style={{fontSize:'15px',marginLeft:'5px'}}>กำหนดจำนวนของข้อมูล n    </span>
+                    <span style={{fontSize:'15px',marginLeft:'5px'}}>จำนวนของข้อมูล n    </span>
                     <span style={{ marginLeft: '16px' }}><Button type="primary" onClick={this.onClickMinus}>-</Button></span>
                     <span style={{ marginLeft: '10px', fontSize: '20px' }}>{this.state.n}</span>
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.onClickPlus}>+</Button></span>
                 </div>
                 <div style={{ marginBottom: '10px' }}>
-                <span style={{fontSize:'15px',marginLeft:'5px'}}>กำหนดจำนวนเลขยกกำลัง k</span>
+                <span style={{fontSize:'15px',marginLeft:'5px'}}>จำนวนเลขยกกำลัง k</span>
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.onClickMinus_K}>-</Button></span>
                     <span style={{ marginLeft: '10px', fontSize: '20px' }}>{this.state.k}</span>
                     <span style={{ marginLeft: '10px' }}><Button type="primary" onClick={this.onClickPlus_K}>+</Button></span>
@@ -207,7 +207,7 @@ class PolymomialRegression extends React.Component {
                 </div>
                 <div>{this.state.ifer}</div>
                 {this.state.hasClick ?
-                    <div className="content-text">f({this.state.x}) = {this.state.result}</div>
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.state.x}) = {this.state.result}</div>
                     : null
                     
                 }

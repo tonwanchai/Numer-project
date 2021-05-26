@@ -24,10 +24,10 @@ class Secant extends Component {
         console.log(this.state.apiData);
         
         this.setState({
-            f_x: this.state.apiData[0]["equation"],
-            x0:this.state.apiData[0]["initial_x"],
-            x1:parseFloat(this.state.apiData[0]["initial_x"])+1.0,
-            er : this.state.apiData[0]["error"],
+            f_x: this.state.apiData[3]["equation"],
+            x0:this.state.apiData[3]["initial_x"],
+            x1:parseFloat(this.state.apiData[3]["initial_x"])+1.0,
+            er : this.state.apiData[3]["error"],
         })
         
     }

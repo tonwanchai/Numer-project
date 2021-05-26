@@ -11,7 +11,8 @@ class Lagrange extends React.Component {
         y: null,
         L: null,
         apiData: null,
-        ifer:null
+        ifer:null,
+        hasClick:false
     }
     async getDataFromAPI() {
         let tmpData = null
@@ -91,7 +92,7 @@ class Lagrange extends React.Component {
             tmpPoint = tmpPoint.map((x => (+x) - 1))
             let ans = this.Calculate(tmpMt, +this.state.x, tmpPoint);
             console.log(ans.y)
-            this.setState({ y: ans.y })
+            this.setState({ y: ans.y ,hasClick:true})
 
         }
         catch (error) {
@@ -160,7 +161,11 @@ class Lagrange extends React.Component {
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
                 <div>{this.state.ifer}</div>
-                <div style={{ marginTop: '10px' }}>f({this.state.x}) = {this.state.y}</div>
+                {this.state.hasClick ?
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.state.x}) = {this.state.y}</div>
+                    : null
+                    
+                }
 
 
             </div>

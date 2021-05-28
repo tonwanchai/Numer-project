@@ -3,7 +3,11 @@ import { Input, Button } from 'antd';
 
 import { equation_func, fixed_fx } from './Equation_Function'
 import apis from '../Container/API'
+import { create, all } from 'mathjs'
+import functionPlot from 'function-plot'
 
+const config = {}
+const math = create(all, config)
 class BisectionMethod extends React.Component {
 
     state = {
@@ -15,8 +19,9 @@ class BisectionMethod extends React.Component {
         ifer: null,
         ans: null,
         apiData: null,
-        result: null
-
+        result: null,
+        tmpXl:[[]],
+        tmpXr:[[]]
     };
 
     async GetDatafromAPI() {
@@ -67,10 +72,17 @@ class BisectionMethod extends React.Component {
             let xl = parseFloat(this.state.xl);
             let xr = parseFloat(this.state.xr);
             let er = parseFloat(this.state.er);
-
+            let tmpXL = [],tmpXr = []
             let xm = (xl + xr) / 2;
             let num = equation_func(xm, f_x) * equation_func(xr, f_x);
-            
+
+            tmpXL.push([])
+            tmpXL[0].push(xl)
+            tmpXL[0].push(equation_func(xl, f_x))
+            tmpXr.push([])
+            tmpXr[0].push(xr)
+            tmpXr[0].push(equation_func(xr, f_x))
+
             let tmp_er = 9999999;
             let new_xm = 0;
 
@@ -85,10 +97,11 @@ class BisectionMethod extends React.Component {
             }
 
             while (tmp_er > er) {
-
+                
                 new_xm = (xl + xr) / 2;
                 num = equation_func(new_xm, f_x) * equation_func(xr, f_x);
-
+                
+                
                 if (num > 0) {
                     xr = new_xm;
                 }
@@ -98,6 +111,13 @@ class BisectionMethod extends React.Component {
 
                 tmp_er = Math.abs(new_xm - xm) / new_xm;
                 xm = new_xm;
+                tmpXL.push([])
+                tmpXr.push([])
+                console.log(xl,xr)
+                tmpXL[i].push(xl)
+                tmpXL[i].push(equation_func(xl, f_x));
+                tmpXr[i].push(xr)
+                tmpXr[i].push(equation_func(xr, f_x));
 
                 arr.push(<div style={{ fontSize: '25px' }}>
                     <span style={{ display: 'inline-block', width: '40%' }}>Iteration {i}: x is {xm}</span>
@@ -107,15 +127,50 @@ class BisectionMethod extends React.Component {
 
             }
             arr.push(<div style={{ fontSize: '40px', fontWeight: 'bold' }}>Result of x is {xm}</div>);
+            
             this.setState({ result: arr });
-            this.setState({ ans: xm })
+            this.setState({ ans: xm ,tmpXl:tmpXL,tmpXr:tmpXr})
         } catch (error) {
             this.setState({ ifer: (<div style={{ color: 'red' }}>ใส่ฟังก์ชั่นไม่ถูกต้อง</div>) })
         }
 
 
     };
+    Plot(){
+        console.log(this.state.tmpXl)
+        console.log(this.state.tmpXr)
+        functionPlot({
+            target: "#plt",
+            width: 700,
+            height: 700,
+            xAxis: {domain :[-5,5]},
+            yAxis: { domain: [-1, 9] },
+            grid: true,
+            data: [
+                {
+                    fn:this.state.f_x
+                },
+                {
+                
+                    points:this.state.tmpXl,
+                    fnType:'points',
+                    graphType:'scatter'
+               
+                },
+                {
+                
+                    points:this.state.tmpXr,
+                    fnType:'points',
+                    graphType:'scatter'
+               
+                }
 
+            ]
+          });
+    }
+    onClickShow = e =>{
+        this.Plot();
+    }
     render() {
         return (
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
@@ -134,13 +189,20 @@ class BisectionMethod extends React.Component {
                     <span style={{ marginLeft: '5px', marginRight: '5px' }}><Input placeholder="0.00001" style={{ width: '100px' }} onChange={this.myChangeHandler_er} value={this.state.er} /></span>
                 </div>
                 <div>
-                    <Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button>
+                    <span><Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button></span>
+                    
+                   <span><Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickShow}>Show</Button></span> 
+                
                     {this.state.showApiData}
                 </div>
 
                 <div style={{ marginTop: '20px' }}>
                     {this.state.result}
                 </div>
+                
+                <div id="plt" style={{margin:"20px"}} />
+                
+                
 
             </div>
         );

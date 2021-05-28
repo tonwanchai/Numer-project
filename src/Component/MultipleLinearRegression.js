@@ -105,13 +105,13 @@ class MultipleLinear extends React.Component {
     onChangeMatrix_Y = e => {
         let tmpIndex = e.target.name
         let tmpMt = this.state.Matrix_Y;
-        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] = e.target.value;
+        tmpMt[parseInt(tmpIndex)] = e.target.value;
         this.setState({ matrix_Y: tmpMt });
     }
     onChangeMatrix_ansX = e => {
         let tmpIndex = e.target.name
         let tmpMt = this.state.ansX;
-        tmpMt[parseInt(tmpIndex[0])][parseInt(tmpIndex[1])] = e.target.value;
+        tmpMt[parseInt(tmpIndex)] = e.target.value;
         this.setState({ ansX: tmpMt });
     }
     showMatrix() {
@@ -142,7 +142,7 @@ class MultipleLinear extends React.Component {
         arr.push(<span>จุด x ที่ต้องการหาผลลัพธ์</span>)
         arr.push(<div style={{ margin: '5px',marginTop:'5px' }}></div>)
         for(let i = 0 ; i < this.state.m;i++){
-            arr.push(<span ><Input style={{ width: '50px', margin: '2.5px' ,textAlign:'center'}} onChange={this.onChangeMatrix_ansX} autocomplete="off" placeholder={"X"+(i+1)} value={tmpAnsX[i]} /></span>)
+            arr.push(<span ><Input style={{ width: '50px', margin: '2.5px' ,textAlign:'center'}} name ={(i).toString()} onChange={this.onChangeMatrix_ansX} autocomplete="off" placeholder={"X"+(i+1)} value={tmpAnsX[i]} /></span>)
         }
         return arr
     }
@@ -208,7 +208,6 @@ class MultipleLinear extends React.Component {
     Calculate(Matrix_X,Matrix_Y,Ans_X,m){
         let d = m+1;
         let tmpArr = []
-        console.log("Before Loop")
         for(let i=0;i<d;i++){
             tmpArr.push([]);
             for(let j=0;j<d+1;j++){
@@ -244,6 +243,7 @@ class MultipleLinear extends React.Component {
         }
         console.log('completed 2nd loop',matrixA)
         console.log('completed 2nd loop',matrixB)
+        
         let invMatrixA = math.inv(matrixA)
         console.log('Inv_A = ',invMatrixA)
         let matrixC = math.multiply(matrixB, invMatrixA)
@@ -300,7 +300,7 @@ class MultipleLinear extends React.Component {
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
                 </div>
                 {this.state.hasClick ?
-                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.showFX}) = {this.state.x}</div>
+                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.showFX()}) = {this.state.x}</div>
                     : null
                     
                 }

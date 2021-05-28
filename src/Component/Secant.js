@@ -3,7 +3,7 @@ import {equation_func, fixed_fx} from './Equation_Function'
 import {Input,Button} from 'antd';
 import apis from '../Container/API'
 import { create, all } from 'mathjs'
-
+import functionPlot from 'function-plot'
 const config = { }
 const math = create(all, config)
 
@@ -15,7 +15,8 @@ class Secant extends Component {
         er:null,
         ans:null,
         apiData:null,
-        ifer:null
+        ifer:null,
+        tmpX:[[]]
     }
     async GetDatafromAPI(){
         let tmpData = null
@@ -69,7 +70,7 @@ class Secant extends Component {
             let tmp_er = 9999999;
             let arr = [];
             let i = 1;
-
+            let tmpX = []
             while(tmp_er > er){
 
                 x_new = x1 - ((equation_func(x1,f_x)*(x1-x0))/(equation_func(x1,f_x)-equation_func(x0,f_x)))
@@ -78,7 +79,9 @@ class Secant extends Component {
             
                 x0 = x1;
                 x1 = x_new;
-
+                tmpX.push([])
+                tmpX[i-1].push(x_new)
+                tmpX[i-1].push(equation_func(x_new,f_x))
                 arr.push(<div style={{fontSize:'25px'}}>
                     <span style={{display:'inline-block',width:'40%'}}>Iteration {i}: x is {x_new}</span>
                     <span>Error : {tmp_er.toFixed(15)}</span>
@@ -87,11 +90,40 @@ class Secant extends Component {
 
             }
             arr.push(<div style={{fontSize:'40px',fontWeight:'bold'}}>Result of x is {x_new}</div>);
-            this.setState({ans:arr});
+            this.setState({ans:arr,tmpX:tmpX});
 
         } catch(error){
             this.setState({ifer:(<div style={{color:'red'}}>ใส่ฟังก์ชั่นไม่ถูกต้อง</div>)})
         }
+    }
+    Plot() {
+        console.log(this.state.tmpX)
+        
+        functionPlot({
+            target: "#plt",
+            width: 700,
+            height: 700, 
+            xAxis: { domain: [-5, 5] },
+            yAxis: { domain: [-1, 9] },
+            grid: true,
+            data: [
+                {
+                    fn: this.state.f_x
+                },           
+                {
+
+                    points: this.state.tmpX,
+                    fnType: 'points',
+                    graphType: 'scatter'
+
+                }
+
+            ]
+        });
+    }
+    onClickShow = e =>{
+        this.Plot();
+        console.log("onclickshow")
     }
     render(){
         return(
@@ -112,13 +144,16 @@ class Secant extends Component {
                     
                 </div>
                 <div>
-                    <Button style={{marginLeft:'5px',width:'100px',marginTop:'5px'}} type='primary' onClick={this.onClickExample}>Example</Button>
+                <span><Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickExample}>Example</Button></span>
+                    
+                    <span><Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickShow}>Show</Button></span> 
                    
                 </div>
+                
                 <div style={{marginTop:'20px'}}>
                     {this.state.ans}
                 </div>
-                
+                <div id="plt" style={{margin:"20px"}} />
             </div>
         )
     }

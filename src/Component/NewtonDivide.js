@@ -1,6 +1,9 @@
 import React from 'react'
 import { Button, Input } from 'antd'
 import apis from '../Container/API'
+import functionPlot from 'function-plot'
+
+
 const math = require('mathjs')
 class NewtonDivide extends React.Component {
     state = {
@@ -12,6 +15,7 @@ class NewtonDivide extends React.Component {
         c: [],
         apiData: null,
         ifer:null,
+        f_x:null,
         hasClick:false
     }
     async getDatafromAPI() {
@@ -126,7 +130,7 @@ class NewtonDivide extends React.Component {
         let arrC = []
         let sum = math.bignumber(arrFx[0][0]);
         arrC.push(sum.toFixed(20))
-
+        
         let C = math.bignumber(1);
         for (let i = 0; i < n - 1; i++) {
             arrC.push(arrFx[i + 1][0].toFixed(20))
@@ -136,8 +140,45 @@ class NewtonDivide extends React.Component {
             temp = math.multiply(C, arrFx[i + 1][0])
             sum = math.add(sum, temp)
         }
+        let text =  "("+arrC[0].toString()+")"
+        for(let i = 1 ; i <arrC.length;i++){
+            text = text + "+" + "("+arrC[i].toString()+")"
+            for(let j =0;j<i;j++){
+                text = text + "*(x-"+arrX[j].toString()+")"
+            }
+        }
+        console.log(text);
+        this.setState({f_x:text})
         return { ans: sum.toString(), C: arrC }
 
+    }
+    Plot() {
+        console.log(this.state.tmpX)
+        
+        functionPlot({
+            target: "#plt",
+            width: 700,
+            height: 700, 
+            xAxis: { domain: [-100000, 100000] },
+            yAxis: { domain: [-10, 10] },
+            grid: true,
+            data: [
+                {
+                    fn:this.state.f_x
+                },
+                {
+                  points :this.state.matrix,
+                  fnType:'points',
+                  color:'black',
+                  graphType:'scatter'
+                },           
+
+            ]
+        });
+    }
+    onClickShow = e =>{
+        this.Plot();
+        console.log("onclickshow")
     }
     render() {
         return (
@@ -169,6 +210,7 @@ class NewtonDivide extends React.Component {
                 <div style={{ margin: '5px' }}>
                     <Button style={{ marginLeft: 'px', width: '100px' }} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
+                    <span><Button style={{ marginLeft: '5px', width: '100px', marginTop: '5px' }} type='primary' onClick={this.onClickShow}>Show</Button></span>
                 </div>
                 <div>{this.state.ifer}</div>
                 {this.state.hasClick ?
@@ -176,6 +218,7 @@ class NewtonDivide extends React.Component {
                     : null
                     
                 }
+                <div id='plt' style={{margin:'20px'}}></div>
 
             </div>
         );

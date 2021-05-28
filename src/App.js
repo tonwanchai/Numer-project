@@ -24,6 +24,7 @@ import JacobiIterationMethod from './Component/JacobiIterationMethod';
 import LUdecomposition from './Component/LUdecomposition';
 import PolymomialRegression from './Component/Regression';
 import MultipleLinear from './Component/MultipleLinearRegression';
+import test from './Component/test'
 const { Header, Content, Sider } = Layout;
 
 class App extends Component {
@@ -72,6 +73,7 @@ class App extends Component {
                                     <Route path='/PolynomialRegression' component={PolymomialRegression} />
                                     <Route path='/Swagger' component={SwaggerAPI} />
                                     <Route path='/MultipleLinear' component={MultipleLinear} />
+                                    <Route path='/test' component={test} />
                                 </div>
 
                             </Content>

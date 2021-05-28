@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 const api = axios.create({
-    baseURL : "https://my-json-server.typicode.com/tonwanchai/numeric-project/"
+    baseURL : "http://localhost:4000/"
 })
 
 const getAllInterpolation = () => api.get("/interpolation")

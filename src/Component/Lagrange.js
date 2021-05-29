@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Input } from 'antd'
 import apis from '../Container/API'
+import functionPlot from 'function-plot'
+import { to } from 'mathjs'
 const math = require('mathjs')
 class Lagrange extends React.Component {
     state = {
@@ -11,8 +13,9 @@ class Lagrange extends React.Component {
         y: null,
         L: null,
         apiData: null,
-        ifer:null,
-        hasClick:false
+        ifer: null,
+        hasClick: false,
+        f_x: null
     }
     async getDataFromAPI() {
         let tmpData = null
@@ -92,15 +95,17 @@ class Lagrange extends React.Component {
             tmpPoint = tmpPoint.map((x => (+x) - 1))
             let ans = this.Calculate(tmpMt, +this.state.x, tmpPoint);
             console.log(ans.y)
-            this.setState({ y: ans.y ,hasClick:true})
+            this.setState({ y: ans.y, hasClick: true })
 
         }
         catch (error) {
-            this.setState({ifer:(<div style={{fontSize:'30px',color:'red'}}>
-                ใส่ข้อมูลไม่ถูกต้อง
-            </div>)})
+            this.setState({
+                ifer: (<div style={{ fontSize: '30px', color: 'red' }}>
+                    ใส่ข้อมูลไม่ถูกต้อง
+                </div>)
+            })
         }
-        
+
     }
     Calculate(matrix, x, selectedPoint) {
         let n = selectedPoint.length
@@ -125,10 +130,43 @@ class Lagrange extends React.Component {
             arrL.push(math.divide(mulUp, mulDown).toFixed(20))
             sum = math.add(sum, math.multiply(math.divide(mulUp, mulDown), arrFx[i]))
         }
+        let text = ""
+        let textUp = "";
+        
 
 
+        for (let j = 0; j < n; j++) {
+            textUp = ""
+            let mulDown = 1
+            for (let k = 0; k < n; k++) {
+                if (j != k) {
+                    
+                    if(k!=n-1 && j != n-1){
+                        textUp = textUp + "(x-" + arrX[k].toString() + ")";
+                        mulDown = math.multiply(math.subtract(math.bignumber(arrX[j]), arrX[k]), mulDown)
+
+                    }
+                    
+                    else{
+                        textUp = textUp + "(x-" + arrX[k].toString() + ")";
+                        mulDown = math.multiply(math.subtract(math.bignumber(arrX[j]), arrX[k]), mulDown)
+                    }
+                    
+                }
+            }
+            if (j != n - 1) {
+                text = text + "(" + textUp + ")" + "*" +"("+ ((arrFx[j]/mulDown).toFixed(20)).toString()+")+";
+            } else {
+                text = text + "(" + textUp + ")" + "*" +"("+ ((arrFx[j]/mulDown).toFixed(20)).toString()+")";
+            }
+
+                    
+        }
+        console.log(text)
+        this.setState({ f_x: text })
         return { y: sum.toString(), L: arrL }
     }
+  
     render() {
         return (
             <div className="site-layout-background" style={{ padding: 24, textAlign: 'left' }}>
@@ -159,14 +197,15 @@ class Lagrange extends React.Component {
                 <div style={{ margin: '5px' }}>
                     <Button style={{ marginLeft: 'px', width: '100px' }} type='primary' onClick={this.onClickCalculation}>Calculation</Button>
                     <Button style={{ marginLeft: '5px', width: '100px' }} type='primary' onClick={this.onClickExample}>Example</Button>
+                    
                 </div>
                 <div>{this.state.ifer}</div>
                 {this.state.hasClick ?
-                    <div style={{fontSize:'20px',fontWeight: 'bold'}}>f({this.state.x}) = {this.state.y}</div>
+                    <div style={{ fontSize: '20px', fontWeight: 'bold' }}>f({this.state.x}) = {this.state.y}</div>
                     : null
-                    
-                }
 
+                }
+          
 
             </div>
         )

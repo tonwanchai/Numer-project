@@ -183,7 +183,7 @@ class MultipleLinear extends React.Component {
         }
         return sum
     }
-    Cal_sum1D(Matrix,index){
+    Cal_sumY(Matrix){
         let sum = 0;
         for(let i = 0 ;i<this.state.n;i++){
             sum = sum + Matrix[i]
@@ -215,7 +215,7 @@ class MultipleLinear extends React.Component {
                     tmpArr[i][j] = this.state.n;
                 }
                 else if(i==0&&j==d){
-                    tmpArr[i][j] = this.Cal_sum1D(Matrix_Y,0)
+                    tmpArr[i][j] = this.Cal_sumY(Matrix_Y)
                 }
                 else if(i==0){
                     tmpArr[i][j] = this.Cal_sum2D(Matrix_X,j-1)
@@ -232,8 +232,7 @@ class MultipleLinear extends React.Component {
                 }
             }
         }
-        console.log(tmpArr)
-        console.log('completed 1st loop')
+      
         let matrixA = []
         let matrixB = []
         for (let i = 0; i < tmpArr.length; i++) {
@@ -241,8 +240,6 @@ class MultipleLinear extends React.Component {
             matrixA[i] = tmpArr[i].slice(0, tmpArr[0].length - 1)
             matrixB[i] = tmpArr[i][tmpArr[0].length-1]
         }
-        console.log('completed 2nd loop',matrixA)
-        console.log('completed 2nd loop',matrixB)
         
         let invMatrixA = math.inv(matrixA)
         console.log('Inv_A = ',invMatrixA)
@@ -253,7 +250,7 @@ class MultipleLinear extends React.Component {
             sum = sum + (matrixC[i] * (Ans_X[i-1]))
 
         }
-        console.log('completed 3nd loop')
+        
         return sum;
     }
     showFX(){

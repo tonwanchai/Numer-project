@@ -30,10 +30,10 @@ class BisectionMethod extends React.Component {
         this.setState({ apiData: tmpData })
         console.log(this.state.apiData);
         this.setState({
-            f_x: this.state.apiData[0]["equation"],
-            xl: this.state.apiData[0]["xl"],
-            xr: this.state.apiData[0]["xr"],
-            er: this.state.apiData[0]["error"],
+            f_x: this.state.apiData[1]["equation"],
+            xl: this.state.apiData[1]["xl"],
+            xr: this.state.apiData[1]["xr"],
+            er: this.state.apiData[1]["error"],
         })
 
     }
